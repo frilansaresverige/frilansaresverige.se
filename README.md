@@ -20,4 +20,4 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 Bring your ideas to #frilansaresverigese in our Slack.
 
-Fork & pull request 👍
+Fork & pull request - make sure to attach a screenshot of the effect of your change so it is easy to review 👍

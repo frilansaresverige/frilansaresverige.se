@@ -1,9 +1,17 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
+  const admins: string[] = [
+    'wille@wilhelmeklund.com',
+    'pm@annaleijon.se',
+    'erik@cheerfulcoders.se',
+    'jocke.ekberg@gmail.com',
+  ]
+
+  const nbrFreelansers = 500
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,38 +27,52 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>Frilansare Sverige</h1>
 
         <p className={styles.description}>
-          Frilansare Sverige är Sveriges största community för frilansare.
+          Syfte: Främja kontaktskapande och uppdragstipsande, utan krav på
+          motprestation, mellan frilansare.
         </p>
 
-        {/* <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <p className={styles.description}>
+          Vi är Sveriges största community för frilansare med över{' '}
+          {nbrFreelansers} medlemmar!
+        </p>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        <div className={styles.grid}>
+          <div className={styles.card}>
+            <h2>Ett Slack community</h2>
+            <p>Frilansare från hela Sverige är välkomna.</p>
+          </div>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
+          <div className={styles.card}>
+            <h2>Vi hjälper varandra</h2>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+              Vi hjälper varandra med allt som rör livet som frilansare! T.ex
+              hur man hittar uppdrag och hur man bokför saker.
             </p>
-          </a>
-        </div> */}
+          </div>
+
+          <div className={styles.card}>
+            <h2>Vill du ha hjälp med något?</h2>
+            <p>
+              Om du jobbar på ett bolag som har konsultbehov så kan ni gratis nå
+              ut till över {nbrFreelansers} frilansare med informationen, utan
+              mellanhänder.
+            </p>
+          </div>
+        </div>
+
+        <p className={styles.description}>
+          Kontakta någon av oss som är administratörer om du är frilansare och
+          vill få en inbjudan.
+          <ul className={styles.list}>
+            {admins.map((email) => (
+              <li key={email}>
+                <a href={`mailto:${email}?subject=FrilansareSverige`}>
+                  {email}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </p>
       </main>
     </div>
   )
