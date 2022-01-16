@@ -27,13 +27,9 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>Frilansare Sverige</h1>
 
         <p className={styles.description}>
-          Syfte: Främja kontaktskapande och uppdragstipsande, utan krav på
-          motprestation, mellan frilansare.
-        </p>
-
-        <p className={styles.description}>
           Vi är Sveriges största community för frilansare med över{' '}
-          {nbrFreelansers} medlemmar!
+          {nbrFreelansers} medlemmar! Vårt syfte är att främja kontaktskapande
+          och uppdragstipsande mellan frilansare.
         </p>
 
         <div className={styles.grid}>
