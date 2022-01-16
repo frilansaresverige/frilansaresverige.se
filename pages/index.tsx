@@ -38,14 +38,14 @@ const Home: NextPage = () => {
 
         <div className={styles.grid}>
           <div className={styles.card}>
-            <h2>Ett Slack community</h2>
+            <h2>Ett Slack-community</h2>
             <p>Frilansare från hela Sverige är välkomna.</p>
           </div>
 
           <div className={styles.card}>
             <h2>Vi hjälper varandra</h2>
             <p>
-              Vi hjälper varandra med allt som rör livet som frilansare! T.ex
+              Vi hjälper varandra med allt som rör livet som frilansare! T ex
               hur man hittar uppdrag och hur man bokför saker.
             </p>
           </div>
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
           <div className={styles.card}>
             <h2>Vill du ha hjälp med något?</h2>
             <p>
-              Om du jobbar på ett bolag som har konsultbehov så kan ni gratis nå
+              Om du jobbar på ett bolag som har konsultbehov så kan du gratis nå
               ut till över {nbrFreelansers} frilansare med informationen, utan
               mellanhänder.
             </p>
