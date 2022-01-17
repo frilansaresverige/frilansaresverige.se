@@ -119,3 +119,9 @@
     flex-direction: column;
   }
 }
+
+.divider {
+  width: 100%;
+  border-top: 5px solid #bce4ff;
+  margin: 2rem 0;
+}
