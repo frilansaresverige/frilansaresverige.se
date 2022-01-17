@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import Header from '../components/Header'
 import Title from '../components/Title'
 import styles from '../styles/Home.module.css'
@@ -33,10 +34,12 @@ const Home: NextPage = () => {
             </p>
           </div>
 
-          <a className={styles.card} href="/ansokan">
-            <h2>Ansök om medlemskap &rarr;</h2>
-            <p>Ansök om medlemskap om du är frilansare!</p>
-          </a>
+          <Link href="/ansokan">
+            <a className={styles.card}>
+              <h2>Ansök om medlemskap &rarr;</h2>
+              <p>Ansök om medlemskap om du är frilansare!</p>
+            </a>
+          </Link>
 
           <div className={styles.card}>
             <h2>Vill du ha hjälp med något?</h2>
