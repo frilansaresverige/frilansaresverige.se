@@ -7,6 +7,8 @@ const slackWebHookURL: string | undefined =
 interface RequestSlackInvitationBody {
   name: string
   email: string
+  howlong: string
+  linkedin: string
   motivation: string
 }
 
@@ -14,6 +16,7 @@ interface ErrorResponse {
   error: string
 }
 interface SuccessResponse {
+  success: boolean
   name: string
   slackResponse: string
 }
@@ -86,12 +89,14 @@ export default async function handler(
 
   const newMessage: MessageBody = {
     ...messageBody,
-    text: `Ny frilansare på ingång! ${body.name} [${body.email}]. \n\nMotivering: ${body.motivation}`,
+    text: `Ny frilansare på ingång! \nNamn: ${body.name} \nEmail: ${body.email} \nTid som frilansare: ${body.howlong} \nLinkedIn: ${body.linkedin} \nMotivering: ${body.motivation}`,
   }
 
   const slackResponse = await sendSlackMessage(slackWebHookURL, newMessage)
 
-  res
-    .status(200)
-    .json({ name: 'Request Slack invitation result', slackResponse })
+  res.status(200).json({
+    success: true,
+    name: 'Request Slack invitation result',
+    slackResponse,
+  })
 }

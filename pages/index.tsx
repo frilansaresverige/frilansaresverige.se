@@ -1,17 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import RequestSlackInvitationForm from '../components/RequestSlackInvitationForm'
+
+const nbrFreelansers = 500
 
 const Home: NextPage = () => {
-  const admins: string[] = [
-    'wille@wilhelmeklund.com',
-    'pm@annaleijon.se',
-    'erik@cheerfulcoders.se',
-    'jocke.ekberg@gmail.com',
-  ]
-
-  const nbrFreelansers = 500
-
   return (
     <div className={styles.container}>
       <Head>
@@ -56,19 +50,9 @@ const Home: NextPage = () => {
           </div>
         </div>
 
-        <p className={styles.description}>
-          Kontakta någon av oss som är administratörer om du är frilansare och
-          vill få en inbjudan.
-          <ul className={styles.list}>
-            {admins.map((email) => (
-              <li key={email}>
-                <a href={`mailto:${email}?subject=FrilansareSverige`}>
-                  {email}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </p>
+        <div className={styles.divider}></div>
+
+        <RequestSlackInvitationForm />
       </main>
     </div>
   )
