@@ -1,5 +1,7 @@
 .container {
   padding: 0 2rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .main {
@@ -70,7 +72,7 @@
 
 .grid {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   flex-wrap: wrap;
   max-width: 800px;
