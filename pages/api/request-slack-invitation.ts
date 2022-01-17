@@ -44,8 +44,8 @@ function sendSlackMessage(
   // make sure the incoming message body can be parsed into valid JSON
   try {
     messageString = JSON.stringify(messageBody)
-  } catch (e) {
-    throw new Error('Failed to stringify messageBody', e as ErrorOptions)
+  } catch (_error) {
+    throw new Error('Failed to stringify messageBody')
   }
 
   // Promisify the https.request
