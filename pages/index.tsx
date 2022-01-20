@@ -1,25 +1,18 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
+import Header from '../components/Header'
+import Title from '../components/Title'
 import styles from '../styles/Home.module.css'
-import RequestSlackInvitationForm from '../components/RequestSlackInvitationForm'
 
 const nbrFreelansers = 500
 
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Frilansare Sverige</title>
-        <meta
-          name="description"
-          content="Frilansare Sverige är Sveriges största community för frilansare."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+      <Header />
       <main className={styles.main}>
-        <h1 className={styles.title}>Frilansare Sverige</h1>
+        <Title>Frilansare Sverige</Title>
 
         <p className={styles.description}>
           Vi är Sveriges största community för frilansare med över{' '}
@@ -41,6 +34,13 @@ const Home: NextPage = () => {
             </p>
           </div>
 
+          <Link href="/ansokan">
+            <a className={styles.card}>
+              <h2>Ansök om medlemskap &rarr;</h2>
+              <p>Ansök om medlemskap om du är frilansare!</p>
+            </a>
+          </Link>
+
           <div className={styles.card}>
             <h2>Vill du ha hjälp med något?</h2>
             <p>
@@ -50,10 +50,6 @@ const Home: NextPage = () => {
             </p>
           </div>
         </div>
-
-        <div className={styles.divider}></div>
-
-        <RequestSlackInvitationForm />
       </main>
 
       <footer className={styles.footer}>
