@@ -41,14 +41,16 @@ const Home: NextPage = () => {
             </a>
           </Link>
 
-          <div className={styles.card}>
-            <h2>Vill du ha hjälp med något?</h2>
-            <p>
-              Om du jobbar på ett bolag som har konsultbehov så kan du gratis nå
-              ut till över {nbrFreelansers} frilansare med informationen, utan
-              mellanhänder.
-            </p>
-          </div>
+          <Link href="/uppdrag">
+            <a className={styles.card}>
+              <h2>Vill du ha hjälp med något? &rarr;</h2>
+              <p>
+                Om du jobbar på ett bolag som har konsultbehov så kan du gratis
+                nå ut till över {nbrFreelansers} frilansare med informationen,
+                utan mellanhänder.
+              </p>
+            </a>
+          </Link>
         </div>
       </main>
 
