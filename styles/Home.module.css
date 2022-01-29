@@ -105,4 +105,8 @@ a.card:hover {
     width: 100%;
     flex-direction: column;
   }
+
+  .card {
+    max-width: 100%;
+  }
 }
