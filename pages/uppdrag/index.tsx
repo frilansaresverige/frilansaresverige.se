@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Head from 'next/head'
 import Link from 'next/link'
 import Title from '../../components/Title'
 import styles from './Uppdrag.module.css'
@@ -7,6 +8,9 @@ const Uppdrag: NextPage = () => {
   return (
     <div>
       <main>
+        <Head>
+          <title>Frilansare Sverige - Uppdrag</title>
+        </Head>
         <Title>
           <Link href="/">Frilansare Sverige</Link>
         </Title>
