@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Head from 'next/head'
 import Link from 'next/link'
 
 import Title from '../components/Title'
@@ -9,6 +10,9 @@ const nbrFreelansers = 500
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Frilansare Sverige</title>
+      </Head>
       <main className={styles.main}>
         <Title>Frilansare Sverige</Title>
 

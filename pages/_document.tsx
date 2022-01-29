@@ -5,7 +5,6 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>Frilansare Sverige</title>
           <meta
             name="description"
             content="Frilansare Sverige är Sveriges största community för frilansare."
