@@ -43,7 +43,7 @@ const Home: NextPage = () => {
             </a>
           </Link>
 
-          <Link href="/uppdrag">
+          <Link href="https://uppdrag.frilansaresverige.se/">
             <a className={styles.card}>
               <h2>Vill du ha hjälp med något? &rarr;</h2>
               <p>
