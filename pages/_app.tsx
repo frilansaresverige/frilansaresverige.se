@@ -2,6 +2,7 @@ import '../styles/globals.css'
 
 import type { AppProps } from 'next/app'
 import Image from 'next/image'
+import CookieConsent from 'react-cookie-consent'
 
 import styles from '../styles/Home.module.css'
 
@@ -26,6 +27,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           </span>
         </a>
       </footer>
+      <CookieConsent>
+        Vi använder cookies för att se hur många besökare det kommer till denna
+        sida.
+      </CookieConsent>
     </>
   )
 }
