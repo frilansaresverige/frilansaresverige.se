@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
-import Header from '../components/Header'
+
 import Title from '../components/Title'
 import styles from '../styles/Home.module.css'
 
@@ -10,7 +9,6 @@ const nbrFreelansers = 500
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
-      <Header />
       <main className={styles.main}>
         <Title>Frilansare Sverige</Title>
 
@@ -53,24 +51,6 @@ const Home: NextPage = () => {
           </Link>
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://github.com/frilansaresverige/frilansaresverige.se/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Bidra till sidan genom vår GitHub 👉
-          <span className={styles.logo}>
-            <Image
-              alt="Github Logo"
-              src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg"
-              width={20}
-              height={20}
-            />
-          </span>
-        </a>
-      </footer>
     </div>
   )
 }

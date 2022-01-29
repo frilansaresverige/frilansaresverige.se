@@ -1,13 +1,11 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import Header from '../../components/Header'
 import Title from '../../components/Title'
 import styles from './Uppdrag.module.css'
 
 const Uppdrag: NextPage = () => {
   return (
     <div>
-      <Header />
       <main>
         <Title>
           <Link href="/">Frilansare Sverige</Link>
