@@ -27,7 +27,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           </span>
         </a>
       </footer>
-      <CookieConsent>
+      <CookieConsent
+        buttonText="Okej det går väl bra"
+        cookieName="frilansareSverigeKanAnvandaAnalyticsDetGarBra"
+      >
         Vi använder cookies för att se hur många besökare det kommer till denna
         sida.
       </CookieConsent>
