@@ -10,6 +10,7 @@ export default class MyDocument extends Document {
             name="description"
             content="Frilansare Sverige är Sveriges största community för frilansare."
           />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
           {/* Global Site Tag (gtag.js) - Google Analytics */}
           <script
