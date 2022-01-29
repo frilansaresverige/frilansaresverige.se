@@ -80,16 +80,8 @@
   max-width: 300px;
 }
 
-a.card,
-a.card:hover,
-a.card:focus,
-a.card:active {
-  color: #0070f3;
-  border-color: #0070f3;
-}
-
 a.card:hover {
-  border-width: 5px;
+  background-color: #0070f310;
 }
 
 .card h2 {
