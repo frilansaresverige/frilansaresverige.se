@@ -11,10 +11,18 @@ const RequestSlackInvitationForm = () => {
     const name = event.target.name.value
     const email = event.target.email.value
     const howlong = event.target.howlong.value
+    const companyName = event.target.companyName.value
     const linkedin = event.target.linkedin.value
     const motivation = event.target.motivation.value
 
-    const requestBody = { name, email, howlong, linkedin, motivation }
+    const requestBody = {
+      name,
+      email,
+      howlong,
+      companyName,
+      linkedin,
+      motivation,
+    }
 
     const res = await fetch('/api/request-slack-invitation', {
       method: 'POST',
@@ -83,6 +91,21 @@ const RequestSlackInvitationForm = () => {
           <input
             id="howlong"
             name="howlong"
+            type="text"
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.item}>
+          <div>
+            <label className={styles.label} htmlFor="companyName">
+              Vad heter ditt företag? Eller har du enskild firma?
+            </label>
+          </div>
+          <input
+            id="companyName"
+            name="companyName"
             type="text"
             className={styles.input}
             required
