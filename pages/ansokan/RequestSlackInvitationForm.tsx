@@ -11,10 +11,18 @@ const RequestSlackInvitationForm = () => {
     const name = event.target.name.value
     const email = event.target.email.value
     const howlong = event.target.howlong.value
+    const companyName = event.target.companyName.value
     const linkedin = event.target.linkedin.value
     const motivation = event.target.motivation.value
 
-    const requestBody = { name, email, howlong, linkedin, motivation }
+    const requestBody = {
+      name,
+      email,
+      howlong,
+      companyName,
+      linkedin,
+      motivation,
+    }
 
     const res = await fetch('/api/request-slack-invitation', {
       method: 'POST',
@@ -38,7 +46,11 @@ const RequestSlackInvitationForm = () => {
   return (
     <div className={styles.formWrapper}>
       <p className={styles.description}>
-        Ansök om medlemskap om du är frilansare!
+        Ansök om medlemskap om du ÄR frilansare!
+      </p>
+
+      <p className={styles.description}>
+        Observera att vi endast godkänner medlemmar som redan ÄR frilansare.
       </p>
 
       <form className={styles.form} onSubmit={submitContact}>
@@ -91,6 +103,21 @@ const RequestSlackInvitationForm = () => {
 
         <div className={styles.item}>
           <div>
+            <label className={styles.label} htmlFor="companyName">
+              Vad heter ditt företag? Eller har du enskild firma?
+            </label>
+          </div>
+          <input
+            id="companyName"
+            name="companyName"
+            type="text"
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="linkedin">
               Länk till din LinkedIn profil
             </label>
@@ -108,7 +135,8 @@ const RequestSlackInvitationForm = () => {
           <div>
             <label className={styles.label} htmlFor="motivation">
               Motivering (berätta kort om vad du gör och varför du vill vara med
-              i vårt community)
+              i vårt community). Observera att vi endast godkänner medlemmar som
+              ÄR frilansare.
             </label>
           </div>
           <textarea

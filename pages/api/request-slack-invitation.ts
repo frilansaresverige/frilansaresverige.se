@@ -8,6 +8,7 @@ interface RequestSlackInvitationBody {
   name: string
   email: string
   howlong: string
+  companyName: string
   linkedin: string
   motivation: string
 }
@@ -86,10 +87,18 @@ export default async function handler(
   }
 
   const body: RequestSlackInvitationBody = req.body
+  const { name, email, howlong, companyName, linkedin, motivation } = body
 
   const newMessage: MessageBody = {
     ...messageBody,
-    text: `Ny frilansare på ingång! \nNamn: ${body.name} \nEmail: ${body.email} \nTid som frilansare: ${body.howlong} \nLinkedIn: ${body.linkedin} \nMotivering: ${body.motivation}`,
+    text:
+      'Ny frilansare på ingång! \n' +
+      `Namn: ${name} \n` +
+      `Email: ${email} \n` +
+      `Tid som frilansare: ${howlong} \n` +
+      `Företagsnamn: ${companyName} \n` +
+      `LinkedIn: ${linkedin} \n` +
+      `Motivering: ${motivation}`,
   }
 
   const slackResponse = await sendSlackMessage(slackWebHookURL, newMessage)
