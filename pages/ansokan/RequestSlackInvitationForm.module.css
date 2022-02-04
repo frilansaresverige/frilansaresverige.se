@@ -1,6 +1,7 @@
 .formWrapper {
   max-width: 800px;
   padding: 0 2rem;
+  margin: 0 auto;
 }
 
 .form {
