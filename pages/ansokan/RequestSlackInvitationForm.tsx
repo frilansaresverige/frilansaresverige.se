@@ -46,11 +46,7 @@ const RequestSlackInvitationForm = () => {
   return (
     <div className={styles.formWrapper}>
       <p className={styles.description}>
-        Ansök om medlemskap om du ÄR frilansare!
-      </p>
-
-      <p className={styles.description}>
-        Observera att vi endast godkänner medlemmar som redan ÄR frilansare.
+        Ansök om medlemskap om du är frilansare!
       </p>
 
       <form className={styles.form} onSubmit={submitContact}>
@@ -129,6 +125,17 @@ const RequestSlackInvitationForm = () => {
             className={styles.input}
             required
           />
+        </div>
+        <div className={styles.item}>
+          <input
+            id="freelancer-confirmation"
+            name="freelancer-confirmation"
+            type="checkbox"
+            required
+          />
+          <label className={styles.label} htmlFor="freelancer-confirmation">
+            Jag är frilansare
+          </label>
         </div>
 
         <div className={styles.item}>
