@@ -1,7 +1,32 @@
 import { useState } from 'react'
 import styles from './RequestSlackInvitationForm.module.css'
 
+import React from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+
 const RequestSlackInvitationForm = () => {
+
+  const recaptchaRef = React.createRef();
+  const [requestObject, setRequestObject] = useState({});
+
+  const onRecaptchaChange = async (token) => {
+    if (!token) {
+      return;
+    }
+
+    recaptchaRef.current.reset();
+
+    const res = await fetch('/api/request-slack-invitation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestObject),
+    })
+     const result = await res.json()
+     if (result.success) {
+      setHasSuccededForm(true)
+    }
+  }
+
   const [hasSuccededForm, setHasSuccededForm] = useState(false)
 
   // @ts-ignore-line
@@ -24,15 +49,9 @@ const RequestSlackInvitationForm = () => {
       motivation,
     }
 
-    const res = await fetch('/api/request-slack-invitation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    })
-    const result = await res.json()
-    if (result.success) {
-      setHasSuccededForm(true)
-    }
+    setRequestObject(requestObject => ({requestBody}));
+
+    await recaptchaRef.current.execute();
   }
 
   if (hasSuccededForm) {
@@ -153,7 +172,12 @@ const RequestSlackInvitationForm = () => {
             required
           ></textarea>
         </div>
-
+        <ReCAPTCHA
+            ref={recaptchaRef}
+            size="invisible"
+            sitekey="6LeOZGIeAAAAAO5a-O1CsigTlbc_D67Q_unDKlJn"
+            onChange={onRecaptchaChange}
+        />
         <button type="submit" className={styles.submit}>
           Skicka in ansökan
         </button>
