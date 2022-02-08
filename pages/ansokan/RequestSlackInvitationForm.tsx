@@ -126,6 +126,17 @@ const RequestSlackInvitationForm = () => {
             required
           />
         </div>
+        <div className={styles.item}>
+          <input
+            id="freelancer-confirmation"
+            name="freelancer-confirmation"
+            type="checkbox"
+            required
+          />
+          <label className={styles.label} htmlFor="freelancer-confirmation">
+            Jag är frilansare
+          </label>
+        </div>
 
         <div className={styles.item}>
           <div>
