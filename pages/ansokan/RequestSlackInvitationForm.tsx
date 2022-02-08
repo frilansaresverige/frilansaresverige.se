@@ -1,3 +1,4 @@
+import { format } from 'path/posix'
 import { useState } from 'react'
 import styles from './RequestSlackInvitationForm.module.css'
 
@@ -37,20 +38,20 @@ const RequestSlackInvitationForm = () => {
 
   if (hasSuccededForm) {
     return (
-      <div className={styles.successBox}>
+      <div className={styles['success-box']}>
         Grattis! Din ansökan är inskickad.
       </div>
     )
   }
 
   return (
-    <div className={styles.formWrapper}>
-      <p className={styles.description}>
-        Ansök om medlemskap om du ÄR frilansare!
-      </p>
+    <div className={styles['form-wrapper']}>
+      <h1 className={styles['form-title']}>
+        Ansök om medlemsskap i slackgruppen för frilansare
+      </h1>
 
-      <p className={styles.description}>
-        Observera att vi endast godkänner medlemmar som redan ÄR frilansare.
+      <p className={styles['form-description']}>
+        Vi godkänner bara ansökningar för dig som redan är frilansare.
       </p>
 
       <form className={styles.form} onSubmit={submitContact}>
@@ -64,7 +65,6 @@ const RequestSlackInvitationForm = () => {
             id="name"
             name="name"
             type="text"
-            className={styles.input}
             autoComplete="name"
             required
           />
@@ -80,7 +80,6 @@ const RequestSlackInvitationForm = () => {
             id="email"
             name="email"
             type="text"
-            className={styles.input}
             autoComplete="email"
             required
           />
@@ -96,7 +95,6 @@ const RequestSlackInvitationForm = () => {
             id="howlong"
             name="howlong"
             type="text"
-            className={styles.input}
             required
           />
         </div>
@@ -111,7 +109,6 @@ const RequestSlackInvitationForm = () => {
             id="companyName"
             name="companyName"
             type="text"
-            className={styles.input}
             required
           />
         </div>
@@ -126,7 +123,6 @@ const RequestSlackInvitationForm = () => {
             id="linkedin"
             name="linkedin"
             type="text"
-            className={styles.input}
             required
           />
         </div>
@@ -142,12 +138,11 @@ const RequestSlackInvitationForm = () => {
           <textarea
             id="motivation"
             name="motivation"
-            className={styles.input}
             required
           ></textarea>
         </div>
 
-        <button type="submit" className={styles.submit}>
+        <button type="submit" className="primary-button">
           Skicka in ansökan
         </button>
       </form>

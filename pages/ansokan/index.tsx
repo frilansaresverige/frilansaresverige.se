@@ -11,9 +11,6 @@ const Ansokan: NextPage = () => {
         <Head>
           <title>Frilansare Sverige - Ansök om medlemskap</title>
         </Head>
-        <Title>
-          <Link href="/">Frilansare Sverige</Link>
-        </Title>
 
         <RequestSlackInvitationForm />
       </main>
