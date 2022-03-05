@@ -32,7 +32,7 @@ const Home: NextPage = () => {
 
           <Link href="/ansokan">
             <a className="primary-button">
-              Ansök om medlemsskap
+              Ansök om medlemskap
               <svg
                 width="24"
                 height="24"
