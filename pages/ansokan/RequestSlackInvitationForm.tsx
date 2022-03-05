@@ -1,5 +1,5 @@
-import { format } from 'path/posix'
 import { useState } from 'react'
+import classNames from 'classnames'
 import styles from './RequestSlackInvitationForm.module.css'
 
 const RequestSlackInvitationForm = () => {
@@ -111,14 +111,18 @@ const RequestSlackInvitationForm = () => {
           </div>
           <input id="linkedin" name="linkedin" type="text" required />
         </div>
-        <div className={styles.item}>
+        <div className={classNames(styles.item, styles.checkboxContainer)}>
           <input
             id="freelancer-confirmation"
             name="freelancer-confirmation"
             type="checkbox"
+            className={classNames(styles.flex, styles.checkbox)}
             required
           />
-          <label className={styles.label} htmlFor="freelancer-confirmation">
+          <label
+            className={classNames(styles.label, styles.flex)}
+            htmlFor="freelancer-confirmation"
+          >
             Jag är frilansare
           </label>
         </div>

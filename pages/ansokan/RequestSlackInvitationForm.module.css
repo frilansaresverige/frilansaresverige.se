@@ -25,6 +25,22 @@
   margin-bottom: 1em;
 }
 
+.checkboxContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  height: 20px;
+}
+
+.flex {
+  display: flex;
+}
+
+.checkbox {
+  max-width: 20px;
+}
+
 .label {
   margin: 4em 0;
   line-height: 1.5;
