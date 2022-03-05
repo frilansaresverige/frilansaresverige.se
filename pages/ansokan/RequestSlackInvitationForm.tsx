@@ -91,12 +91,7 @@ const RequestSlackInvitationForm = () => {
               Hur länge har du varit frilansare?
             </label>
           </div>
-          <input
-            id="howlong"
-            name="howlong"
-            type="text"
-            required
-          />
+          <input id="howlong" name="howlong" type="text" required />
         </div>
 
         <div className={styles.item}>
@@ -105,12 +100,7 @@ const RequestSlackInvitationForm = () => {
               Vad heter ditt företag? Eller har du enskild firma?
             </label>
           </div>
-          <input
-            id="companyName"
-            name="companyName"
-            type="text"
-            required
-          />
+          <input id="companyName" name="companyName" type="text" required />
         </div>
 
         <div className={styles.item}>
@@ -119,12 +109,7 @@ const RequestSlackInvitationForm = () => {
               Länk till din LinkedIn profil
             </label>
           </div>
-          <input
-            id="linkedin"
-            name="linkedin"
-            type="text"
-            required
-          />
+          <input id="linkedin" name="linkedin" type="text" required />
         </div>
         <div className={styles.item}>
           <input
@@ -146,11 +131,7 @@ const RequestSlackInvitationForm = () => {
               ÄR frilansare.
             </label>
           </div>
-          <textarea
-            id="motivation"
-            name="motivation"
-            required
-          ></textarea>
+          <textarea id="motivation" name="motivation" required></textarea>
         </div>
 
         <button type="submit" className="primary-button">

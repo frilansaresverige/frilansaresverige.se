@@ -1,10 +1,10 @@
 :root {
-  --blue: #4823DC;
-  --white: #FFFCE3;
-  --coral: #FF9C8E;
+  --blue: #4823dc;
+  --white: #fffce3;
+  --coral: #ff9c8e;
   --grey: #333333;
-  --dark-blue: #2601BB;
-  --light-coral: #FFCFC8;
+  --dark-blue: #2601bb;
+  --light-coral: #ffcfc8;
 }
 
 html,
@@ -27,7 +27,7 @@ body > div {
 body::before,
 body::after {
   content: '';
-  background: #2601BB;
+  background: #2601bb;
   width: 40em;
   height: 40em;
   position: fixed;
@@ -55,8 +55,6 @@ a {
 *::after {
   box-sizing: border-box;
 }
-
-
 
 /*---------------------------SHARED STYLES--------------------------------*/
 .content {
