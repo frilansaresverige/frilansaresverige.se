@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import classNames from 'classnames'
 import styles from './RequestSlackInvitationForm.module.css'
 
 const RequestSlackInvitationForm = () => {
@@ -37,16 +38,20 @@ const RequestSlackInvitationForm = () => {
 
   if (hasSuccededForm) {
     return (
-      <div className={styles.successBox}>
+      <div className={styles['success-box']}>
         Grattis! Din ansökan är inskickad.
       </div>
     )
   }
 
   return (
-    <div className={styles.formWrapper}>
-      <p className={styles.description}>
-        Ansök om medlemskap om du är frilansare!
+    <div className={styles['form-wrapper']}>
+      <h1 className={styles['form-title']}>
+        Ansök om medlemskap i Slack-gruppen för frilansare
+      </h1>
+
+      <p className={styles['form-description']}>
+        Vi godkänner bara ansökningar för dig som redan är frilansare.
       </p>
 
       <form className={styles.form} onSubmit={submitContact}>
@@ -60,7 +65,6 @@ const RequestSlackInvitationForm = () => {
             id="name"
             name="name"
             type="text"
-            className={styles.input}
             autoComplete="name"
             required
           />
@@ -76,7 +80,6 @@ const RequestSlackInvitationForm = () => {
             id="email"
             name="email"
             type="text"
-            className={styles.input}
             autoComplete="email"
             required
           />
@@ -88,13 +91,7 @@ const RequestSlackInvitationForm = () => {
               Hur länge har du varit frilansare?
             </label>
           </div>
-          <input
-            id="howlong"
-            name="howlong"
-            type="text"
-            className={styles.input}
-            required
-          />
+          <input id="howlong" name="howlong" type="text" required />
         </div>
 
         <div className={styles.item}>
@@ -103,13 +100,7 @@ const RequestSlackInvitationForm = () => {
               Vad heter ditt företag? Eller har du enskild firma?
             </label>
           </div>
-          <input
-            id="companyName"
-            name="companyName"
-            type="text"
-            className={styles.input}
-            required
-          />
+          <input id="companyName" name="companyName" type="text" required />
         </div>
 
         <div className={styles.item}>
@@ -118,22 +109,20 @@ const RequestSlackInvitationForm = () => {
               Länk till din LinkedIn profil
             </label>
           </div>
-          <input
-            id="linkedin"
-            name="linkedin"
-            type="text"
-            className={styles.input}
-            required
-          />
+          <input id="linkedin" name="linkedin" type="text" required />
         </div>
-        <div className={styles.item}>
+        <div className={classNames(styles.item, styles.checkboxContainer)}>
           <input
             id="freelancer-confirmation"
             name="freelancer-confirmation"
             type="checkbox"
+            className={classNames(styles.flex, styles.checkbox)}
             required
           />
-          <label className={styles.label} htmlFor="freelancer-confirmation">
+          <label
+            className={classNames(styles.label, styles.flex)}
+            htmlFor="freelancer-confirmation"
+          >
             Jag är frilansare
           </label>
         </div>
@@ -146,15 +135,10 @@ const RequestSlackInvitationForm = () => {
               ÄR frilansare.
             </label>
           </div>
-          <textarea
-            id="motivation"
-            name="motivation"
-            className={styles.input}
-            required
-          ></textarea>
+          <textarea id="motivation" name="motivation" required></textarea>
         </div>
 
-        <button type="submit" className={styles.submit}>
+        <button type="submit" className="primary-button">
           Skicka in ansökan
         </button>
       </form>

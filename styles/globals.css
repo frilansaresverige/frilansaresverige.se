@@ -1,16 +1,150 @@
+:root {
+  --blue: #4823dc;
+  --white: #fffce3;
+  --coral: #ff9c8e;
+  --grey: #333333;
+  --dark-blue: #2601bb;
+  --light-coral: #ffcfc8;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
+  background: var(--blue);
+  position: relative;
+  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+body > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-* {
+body::before,
+body::after {
+  content: '';
+  background: #2601bb;
+  width: 40em;
+  height: 40em;
+  position: fixed;
+  bottom: 0;
+  z-index: 0;
+  transform: translateX(50%);
+}
+
+body::before {
+  right: 0;
+  border-radius: 50% 50% 0 0;
+}
+
+body::after {
+  right: 40em;
+  border-radius: 50%;
+}
+
+a {
+  color: inherit;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
+
+/*---------------------------SHARED STYLES--------------------------------*/
+.content {
+  padding: 4.5em min(2em, 3vw) 2em;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  z-index: 2;
+  position: relative;
+}
+
+.spacer,
+.logo-container {
+  flex: 999 1 8em;
+}
+
+main {
+  flex: 1 1 40em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-right: auto;
+}
+
+.primary-button {
+  color: var(--grey);
+  background: var(--coral);
+  padding: 0.75em 1.5em;
+  border-radius: 3em;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+  text-decoration: none;
+  font-weight: bold;
+  gap: 0.5em;
+  max-width: max-content;
+  margin-top: 1.25em;
+  font-size: 1.1em;
+  transition: box-shadow 0.15s, background 0.15s;
+  cursor: pointer;
+}
+
+.primary-button:focus {
+  box-shadow: 0 0 0 0.1em var(--white), 0 0 0 0.2em var(--coral);
+}
+
+.primary-button:hover {
+  background: var(--light-coral);
+}
+
+input,
+textarea {
+  font-size: 1.2em;
+  width: 100%;
+  border: 1px solid var(--blue);
+  padding: 0.5em;
+  border-radius: 0.25em;
+  background: var(--white);
+  outline: none;
+  transition: box-shadow 0.15s;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 0.1em var(--white), 0 0 0 0.2em var(--blue);
+}
+
+.footer {
+  padding: 2rem 0;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+  margin-top: auto;
+}
+
+.footer a {
+  color: var(--white);
+}
+
+.description {
+  line-height: 1.5;
+  font-size: 1.5em;
+  color: var(--white);
+  margin: 0 0 3em;
+}
+/*---------------------------/SHARED STYLES--------------------------------*/
