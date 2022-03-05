@@ -47,7 +47,7 @@ const RequestSlackInvitationForm = () => {
   return (
     <div className={styles['form-wrapper']}>
       <h1 className={styles['form-title']}>
-        Ansök om medlemsskap i slackgruppen för frilansare
+        Ansök om medlemskap i Slack-gruppen för frilansare
       </h1>
 
       <p className={styles['form-description']}>
