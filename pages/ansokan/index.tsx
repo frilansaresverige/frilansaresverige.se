@@ -4,15 +4,13 @@ import RequestSlackInvitationForm from './RequestSlackInvitationForm'
 
 const Ansokan: NextPage = () => {
   return (
-    <div>
-      <main>
-        <Head>
-          <title>Frilansare Sverige - Ansök om medlemskap</title>
-        </Head>
+    <>
+      <Head>
+        <title>Frilansare Sverige - Ansök om medlemskap</title>
+      </Head>
 
-        <RequestSlackInvitationForm />
-      </main>
-    </div>
+      <RequestSlackInvitationForm />
+    </>
   )
 }
 

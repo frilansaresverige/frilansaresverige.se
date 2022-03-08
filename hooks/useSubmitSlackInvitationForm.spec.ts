@@ -84,7 +84,7 @@ describe('useSubmitSlackInvitationForm', () => {
       await result.current.submitForm(forceType<FormEvent>(mockedFormEvent))
     })
     expect(result.current.data?.success).toBe(undefined)
-    expect(result.current.error).toBeUndefined()
+    expect(result.current.error).toBeDefined()
     expect(result.current.error).toEqual(new Error('ooops'))
   })
 })
