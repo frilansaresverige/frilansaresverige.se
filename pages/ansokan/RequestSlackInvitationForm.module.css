@@ -54,3 +54,11 @@
   padding: 1em;
   margin-top: 2em;
 }
+
+.error-box {
+  background: #ffaaaa;
+  border: 1px solid #6a6a6a;
+  border-radius: 0.5em;
+  padding: 1em;
+  margin-top: 2em;
+}
