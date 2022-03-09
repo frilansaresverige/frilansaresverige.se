@@ -61,6 +61,7 @@ a {
   padding: 4.5em min(2em, 3vw) 2em;
   margin: 0 auto;
   display: flex;
+  min-width: 100%;
   flex-wrap: wrap;
   gap: 2em;
   z-index: 2;

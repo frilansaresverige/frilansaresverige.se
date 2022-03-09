@@ -1,46 +1,20 @@
-import { useState } from 'react'
 import classNames from 'classnames'
 import styles from './RequestSlackInvitationForm.module.css'
+import { useSubmitSlackInvitationForm } from '../../hooks/useSubmitSlackInvitationForm'
 
 const RequestSlackInvitationForm = () => {
-  const [hasSuccededForm, setHasSuccededForm] = useState(false)
+  const { submitForm, data, error } = useSubmitSlackInvitationForm()
 
-  // @ts-ignore-line
-  const submitContact = async (event) => {
-    event.preventDefault()
-
-    const name = event.target.name.value
-    const email = event.target.email.value
-    const howlong = event.target.howlong.value
-    const companyName = event.target.companyName.value
-    const linkedin = event.target.linkedin.value
-    const motivation = event.target.motivation.value
-
-    const requestBody = {
-      name,
-      email,
-      howlong,
-      companyName,
-      linkedin,
-      motivation,
-    }
-
-    const res = await fetch('/api/request-slack-invitation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    })
-    const result = await res.json()
-    if (result.success) {
-      setHasSuccededForm(true)
-    }
-  }
-
-  if (hasSuccededForm) {
+  if (data?.success) {
     return (
       <div className={styles['success-box']}>
         Grattis! Din ansökan är inskickad.
       </div>
+    )
+  }
+  if (error) {
+    return (
+      <div className={styles['error-box']}>Något gick fel. Försök igen.</div>
     )
   }
 
@@ -54,7 +28,7 @@ const RequestSlackInvitationForm = () => {
         Vi godkänner bara ansökningar för dig som redan är frilansare.
       </p>
 
-      <form className={styles.form} onSubmit={submitContact}>
+      <form className={styles.form} onSubmit={submitForm}>
         <div className={styles.item}>
           <div>
             <label className={styles.label} htmlFor="name">
