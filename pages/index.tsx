@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import styles from '../styles/Home.module.css'
 
-const nbrFreelansers = 500
+const nbrFreelansers = 870
 
 const ArrowRight = () => (
   <svg
