@@ -88,6 +88,9 @@ export default async function handler(
 
   const body: RequestSlackInvitationBody = req.body
   const { name, email, howlong, companyName, linkedin, motivation } = body
+  const companySearchUrl = `https://beta.allabolag.se/bransch-s%C3%B6k?q=${encodeURI(
+    companyName
+  )}`
 
   const newMessage: MessageBody = {
     ...messageBody,
@@ -96,7 +99,7 @@ export default async function handler(
       `Namn: ${name} \n` +
       `Email: ${email} \n` +
       `Tid som frilansare: ${howlong} \n` +
-      `Företagsnamn: ${companyName} \n` +
+      `Företagsnamn: ${companyName}, ${companySearchUrl} \n` +
       `LinkedIn: ${linkedin} \n` +
       `Motivering: ${motivation}`,
   }
