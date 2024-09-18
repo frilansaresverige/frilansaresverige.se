@@ -88,7 +88,7 @@ export default async function handler(
 
   const body: RequestSlackInvitationBody = req.body
   const { name, email, howlong, companyName, linkedin, motivation } = body
-  const companySearchUrl = `https://beta.allabolag.se/bransch-s%C3%B6k?q=${encodeURI(
+  const companySearchUrl = `https://www.allabolag.se/what/${encodeURI(
     companyName
   )}`
 
