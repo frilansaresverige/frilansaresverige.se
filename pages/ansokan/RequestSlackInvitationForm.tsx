@@ -97,7 +97,8 @@ const RequestSlackInvitationForm = () => {
             className={classNames(styles.label, styles.flex)}
             htmlFor="freelancer-confirmation"
           >
-            Jag är frilansare
+            Jag är igång som frilansare, d v s har ett bolag att fakturera genom
+            och tecknat avtal med åtminstone min första kund.
           </label>
         </div>
 
