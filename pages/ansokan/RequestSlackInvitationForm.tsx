@@ -47,7 +47,7 @@ const RequestSlackInvitationForm = () => {
         <div className={styles.item}>
           <div>
             <label className={styles.label} htmlFor="email">
-              Email
+              E-mail
             </label>
           </div>
           <input
