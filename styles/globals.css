@@ -124,6 +124,10 @@ textarea {
   transition: box-shadow 0.15s;
 }
 
+input[type="checkbox"] {
+  width: auto;
+}
+
 input:focus,
 textarea:focus {
   box-shadow: 0 0 0 0.1em var(--white), 0 0 0 0.2em var(--blue);
