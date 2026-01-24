@@ -1,10 +1,46 @@
-import type { NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
 import styles from '../styles/Home.module.css'
 
-const nbrFreelansers = 2000
+const API_BASE_URL =
+  process.env.API_BASE_URL || 'https://uppdrag.frilansaresverige.se/api'
+const MEMBER_COUNT_API = `${API_BASE_URL}/member-count`
+const FALLBACK_MEMBER_COUNT = 'flera tusen'
+const FETCH_TIMEOUT_MS = 1000
+
+async function fetchMemberCount(): Promise<string> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+
+  try {
+    const response = await fetch(MEMBER_COUNT_API, {
+      signal: controller.signal,
+    })
+
+    if (!response.ok) {
+      return FALLBACK_MEMBER_COUNT
+    }
+
+    const text = await response.text()
+    const count = parseInt(text.trim(), 10)
+
+    if (isNaN(count)) {
+      return FALLBACK_MEMBER_COUNT
+    }
+
+    return count.toString()
+  } catch {
+    return FALLBACK_MEMBER_COUNT
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
+interface HomeProps {
+  memberCount: string
+}
 
 const ArrowRight = () => (
   <svg
@@ -21,7 +57,7 @@ const ArrowRight = () => (
   </svg>
 )
 
-const Home: NextPage = () => {
+const Home: NextPage<HomeProps> = ({ memberCount }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -29,8 +65,8 @@ const Home: NextPage = () => {
       </Head>
 
       <p className="description">
-        Vi är Sveriges största community för frilansare med över{' '}
-        {nbrFreelansers} medlemmar! Vårt syfte är att främja kontaktskapande och
+        Vi är Sveriges största community för frilansare med {memberCount}{' '}
+        medlemmar! Vårt syfte är att främja kontaktskapande och
         uppdragstipsande mellan frilansare.
       </p>
 
@@ -57,7 +93,7 @@ const Home: NextPage = () => {
           <h2>Vill du ha hjälp med något? &rarr;</h2>
           <p>
             Om du jobbar på ett bolag som har konsultbehov så kan du gratis nå
-            ut till över {nbrFreelansers} frilansare med informationen, utan
+            ut till {memberCount} frilansare med informationen, utan
             mellanhänder.
           </p>
 
@@ -71,6 +107,17 @@ const Home: NextPage = () => {
       </div>
     </div>
   )
+}
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const memberCount = await fetchMemberCount()
+
+  return {
+    props: {
+      memberCount,
+    },
+    revalidate: 3600,
+  }
 }
 
 export default Home
