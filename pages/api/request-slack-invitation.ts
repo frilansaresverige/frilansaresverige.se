@@ -39,7 +39,7 @@ const messageBody: MessageBody = {
  */
 function sendSlackMessage(
   webhookURL: string,
-  messageBody: MessageBody
+  messageBody: MessageBody,
 ): Promise<string> {
   let messageString: string | undefined
   // make sure the incoming message body can be parsed into valid JSON
@@ -78,7 +78,7 @@ function sendSlackMessage(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<SuccessResponse | ErrorResponse>
+  res: NextApiResponse<SuccessResponse | ErrorResponse>,
 ) {
   if (!slackWebHookURL) {
     console.error('Please fill in your Webhook URL')
@@ -89,7 +89,7 @@ export default async function handler(
   const body: RequestSlackInvitationBody = req.body
   const { name, email, howlong, companyName, linkedin, motivation } = body
   const companySearchUrl = `https://www.allabolag.se/what/${encodeURI(
-    companyName
+    companyName,
   )}`
 
   const newMessage: MessageBody = {

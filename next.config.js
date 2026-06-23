@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   images: {
-    domains: ['github.githubassets.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'github.githubassets.com',
+      },
+    ],
   },
 }
 

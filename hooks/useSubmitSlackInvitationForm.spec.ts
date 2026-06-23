@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import { FormEvent } from 'react'
 import { useSubmitSlackInvitationForm } from './useSubmitSlackInvitationForm'
 
@@ -13,7 +13,7 @@ const mockFetchPromise = ({
     global.fetch = jest
       .fn()
       .mockImplementation(() =>
-        Promise.resolve({ json: () => Promise.resolve({ success }) })
+        Promise.resolve({ json: () => Promise.resolve({ success }) }),
       )
   } else {
     global.fetch = jest

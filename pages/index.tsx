@@ -66,8 +66,8 @@ const Home: NextPage<HomeProps> = ({ memberCount }) => {
 
       <p className="description">
         Vi är Sveriges största community för frilansare med {memberCount}{' '}
-        medlemmar! Vårt syfte är att främja kontaktskapande och
-        uppdragstipsande mellan frilansare.
+        medlemmar! Vårt syfte är att främja kontaktskapande och uppdragstipsande
+        mellan frilansare.
       </p>
 
       <div className={styles.grid}>
@@ -81,11 +81,9 @@ const Home: NextPage<HomeProps> = ({ memberCount }) => {
           <h2>Ett Slack-community</h2>
           <p>Frilansare från hela Sverige är välkomna.</p>
 
-          <Link href="/ansokan">
-            <a className="primary-button">
-              Ansök om medlemskap
-              <ArrowRight />
-            </a>
+          <Link href="/ansokan" className="primary-button">
+            Ansök om medlemskap
+            <ArrowRight />
           </Link>
         </div>
 
@@ -97,11 +95,12 @@ const Home: NextPage<HomeProps> = ({ memberCount }) => {
             mellanhänder.
           </p>
 
-          <Link href="https://uppdrag.frilansaresverige.se/">
-            <a className="primary-button">
-              Tipsa om konsultuppdrag
-              <ArrowRight />
-            </a>
+          <Link
+            href="https://uppdrag.frilansaresverige.se/"
+            className="primary-button"
+          >
+            Tipsa om konsultuppdrag
+            <ArrowRight />
           </Link>
         </div>
       </div>

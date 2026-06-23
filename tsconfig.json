@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2022",
     "lib": [
       "dom",
       "dom.iterable",
@@ -13,30 +13,29 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "types": [
       "node",
       "jest"
     ],
-    "baseUrl": ".",
     "paths": {
       "@/components/*": [
-        "components/*"
+        "./components/*"
       ],
       "@/pages/*": [
-        "pages/*"
+        "./pages/*"
       ],
       "@/styles/*": [
-        "styles/*"
+        "./styles/*"
       ],
       "@/hooks/*": [
-        "hooks/*"
+        "./hooks/*"
       ]
-    },
+    }
   },
   "include": [
     "next-env.d.ts",
