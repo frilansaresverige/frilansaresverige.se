@@ -19,6 +19,12 @@
   color: var(--coral);
 }
 
+/* Short "… »" links read as one unit, so keep the arrow with its words. */
+.wrapper a,
+.linkButton {
+  white-space: nowrap;
+}
+
 .text {
   max-width: 35em;
 }
