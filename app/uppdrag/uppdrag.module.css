@@ -1,0 +1,220 @@
+.wrapper {
+  width: 100%;
+  max-width: 50em;
+  color: var(--white);
+  line-height: 1.5;
+  font-size: 1.1em;
+}
+
+.wrapper h1 {
+  font-size: 1.5em;
+  margin: 0 0 0.75em;
+}
+
+.wrapper p {
+  margin: 0 0 1em;
+}
+
+.wrapper a {
+  color: var(--coral);
+}
+
+.text {
+  max-width: 35em;
+}
+
+.card {
+  padding: 1.5em;
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--blue);
+  margin-bottom: 1.5em;
+}
+
+.card a {
+  color: var(--dark-blue);
+}
+
+.field {
+  display: block;
+  margin-bottom: 1.25em;
+}
+
+.field > span,
+.legend {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+.fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 1.25em;
+}
+
+.legend {
+  padding: 0;
+}
+
+.choice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.choice input {
+  flex: none;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16em, 1fr));
+  column-gap: 1.5em;
+}
+
+.withUnit {
+  display: block;
+  position: relative;
+}
+
+.withUnit input {
+  padding-right: 3.5em;
+  appearance: textfield;
+}
+
+.withUnit input::-webkit-inner-spin-button,
+.withUnit input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.unit {
+  position: absolute;
+  right: 0.75em;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.description {
+  height: 18em;
+  resize: vertical;
+}
+
+.contact,
+.comment {
+  height: 8em;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1em;
+}
+
+.actions :global(.primary-button) {
+  margin-top: 0;
+}
+
+.secondaryButton {
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 3em;
+  color: inherit;
+  padding: 0.75em 1.5em;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--coral);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.success {
+  background: #adffb4;
+  color: var(--grey);
+  border-radius: 0.5em;
+  padding: 1em;
+  margin-bottom: 1.5em;
+}
+
+.error {
+  background: #ffaaaa;
+  color: var(--grey);
+  border-radius: 0.5em;
+  padding: 1em;
+  margin-bottom: 1.5em;
+}
+
+/* Assignment */
+
+.assignment h2 {
+  font-size: 1.25em;
+  margin: 0 0 0.75em;
+}
+
+.assignment h3 {
+  font-size: 1em;
+  margin: 1em 0 0.25em;
+}
+
+.assignment p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 1em;
+  margin: 0 0 1em;
+}
+
+.details dt {
+  font-weight: bold;
+}
+
+.details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.deleted {
+  font-style: italic;
+}
+
+/* Confirm dialog */
+
+.dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 1.5em;
+  max-width: 30em;
+  background: var(--white);
+  color: var(--blue);
+  line-height: 1.5;
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+.dialog h2 {
+  margin: 0 0 0.5em;
+  font-size: 1.25em;
+}
+
+.dialog p {
+  margin: 0 0 1.25em;
+}

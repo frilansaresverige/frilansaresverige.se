@@ -9,7 +9,9 @@ README.md
 .idea
 *.iml
 npm-debug.log*
-.env.local
-.env.*.local
+.env
+.env.*
+!.env.example
 Dockerfile
 .dockerignore
+deploy

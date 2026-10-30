@@ -1,13 +1,15 @@
 import next from 'eslint-config-next/core-web-vitals'
+import nextTypeScript from 'eslint-config-next/typescript'
 import testingLibrary from 'eslint-plugin-testing-library'
 
 const eslintConfig = [
   {
-    ignores: ['.next/**', 'node_modules/**', 'out/**'],
+    ignores: ['.next/**', 'node_modules/**', 'out/**', 'next-env.d.ts'],
   },
   ...next,
+  ...nextTypeScript,
   {
-    files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+    files: ['**/?(*.)+(spec|test).[jt]s?(x)'],
     ...testingLibrary.configs['flat/react'],
   },
 ]
