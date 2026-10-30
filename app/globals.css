@@ -7,6 +7,12 @@
   --light-coral: #ffcfc8;
 }
 
+html {
+  /* Always reserve room for the scrollbar, so the layout doesn't shift
+     between pages that scroll and pages that don't. */
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   padding: 0;
@@ -81,6 +87,11 @@ a {
 .spacer,
 .logo-container {
   flex: 999 1 8em;
+}
+
+/* Only the logo itself links to the start page, not the column around it. */
+.logo {
+  display: inline-block;
 }
 
 main {

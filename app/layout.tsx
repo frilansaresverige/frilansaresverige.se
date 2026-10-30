@@ -43,13 +43,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <div className="page">
           <div className="content">
-            <Link
-              href="/"
-              className="logo-container"
-              title="Gå till startsidan"
-            >
-              <Logo />
-            </Link>
+            <div className="logo-container">
+              <Link href="/" className="logo" title="Gå till startsidan">
+                <Logo />
+              </Link>
+            </div>
             <main>{children}</main>
             <div className="spacer"></div>
           </div>

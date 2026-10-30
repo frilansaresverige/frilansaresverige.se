@@ -32,6 +32,25 @@ describe('AssignmentForm', () => {
   beforeEach(() => {
     vi.mocked(publishAssignment).mockReset()
     window.scrollTo = vi.fn()
+    localStorage.clear()
+  })
+
+  it('restores a half-written assignment and can start over', async () => {
+    const { unmount } = render(<AssignmentForm />)
+    await fillInDirectAssignment()
+    unmount()
+
+    render(<AssignmentForm />)
+    expect(screen.getByLabelText('Uppdragets titel:')).toHaveValue('Utvecklare')
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Vi har återställt det du påbörjade',
+    )
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Töm formuläret »' }),
+    )
+    expect(screen.getByLabelText('Uppdragets titel:')).toHaveValue('')
+    expect(localStorage.length).toBe(0)
   })
 
   it('previews and publishes an assignment', async () => {
@@ -70,6 +89,7 @@ describe('AssignmentForm', () => {
     expect(
       await screen.findByText(/Ditt uppdrag har publicerats/),
     ).toBeVisible()
+    expect(localStorage.length).toBe(0)
   })
 
   it('requires brokers to state their fee or that they withhold it', async () => {

@@ -1,41 +1,30 @@
 'use client'
 
 import Link from 'next/link'
-import { useId, useState, useTransition, type FormEvent } from 'react'
+import {
+  useEffect,
+  useId,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+  type FormEvent,
+} from 'react'
 
-import { limits, type SenderType } from '@/lib/assignmentFields'
+import { limits } from '@/lib/assignmentFields'
 
 import { publishAssignment, type ActionResult } from './actions'
 import AssignmentView from './AssignmentView'
+import {
+  clearDraft,
+  emptyDraft,
+  loadDraft,
+  saveDraft,
+  type Draft,
+  type StoredDraft,
+} from './draftStorage'
 import styles from './uppdrag.module.css'
 
 type Step = 'CRAFT' | 'PREVIEW' | 'PUBLISHED'
-
-interface Draft {
-  senderType: SenderType | null
-  title: string
-  location: string
-  customerName: string
-  customerOrganizationNumber: string
-  customerFee: string
-  isNonTransparentFee: boolean
-  clientHourlyRate: string
-  description: string
-  contact: string
-}
-
-const emptyDraft: Draft = {
-  senderType: null,
-  title: '',
-  location: '',
-  customerName: '',
-  customerOrganizationNumber: '',
-  customerFee: '',
-  isNonTransparentFee: false,
-  clientHourlyRate: '',
-  description: '',
-  contact: '',
-}
 
 const errorMessages: Record<
   Exclude<ActionResult, { ok: true }>['error'],
@@ -47,18 +36,46 @@ const errorMessages: Record<
   NOT_FOUND: 'Ett okänt fel inträffade när uppdraget skulle publiceras.',
 }
 
+const restoredAtFormat = new Intl.DateTimeFormat('sv-SE', {
+  dateStyle: 'long',
+  timeStyle: 'short',
+})
+
 const parseHourlyRate = (value: string) => {
   const rate = Number.parseInt(value, 10)
   return Number.isNaN(rate) ? null : rate
 }
 
-const AssignmentForm = () => {
+interface FormProps {
+  storedDraft: StoredDraft | null
+  // False while rendering on the server and hydrating, when there is no
+  // localStorage to read from; saving then would wipe the stored draft.
+  persist: boolean
+}
+
+const Form = ({ storedDraft, persist }: FormProps) => {
   const hourlyRateId = useId()
   const [step, setStep] = useState<Step>('CRAFT')
-  const [draft, setDraft] = useState<Draft>(emptyDraft)
-  const [emailAddress, setEmailAddress] = useState('')
+  const [draft, setDraft] = useState<Draft>(storedDraft?.draft ?? emptyDraft)
+  const [emailAddress, setEmailAddress] = useState(
+    storedDraft?.emailAddress ?? '',
+  )
   const [error, setError] = useState<string | null>(null)
   const [isPublishing, startPublishing] = useTransition()
+  const [restoredAt, setRestoredAt] = useState(storedDraft?.savedAt ?? null)
+
+  useEffect(() => {
+    if (persist && step !== 'PUBLISHED') {
+      saveDraft(draft, emailAddress)
+    }
+  }, [persist, step, draft, emailAddress])
+
+  const discardDraft = () => {
+    clearDraft()
+    setDraft(emptyDraft)
+    setEmailAddress('')
+    setRestoredAt(null)
+  }
 
   const update = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((previous) => ({ ...previous, [key]: value }))
@@ -105,6 +122,7 @@ const AssignmentForm = () => {
         )
 
         if (result.ok) {
+          clearDraft()
           goTo('PUBLISHED')
         } else {
           setError(errorMessages[result.error])
@@ -199,6 +217,20 @@ const AssignmentForm = () => {
         Vill du veta mer om vad det här är innan du går vidare?{' '}
         <Link href="/uppdrag/information">Läs om den här tjänsten »</Link>
       </p>
+
+      {restoredAt !== null && (
+        <p className={styles.notice} role="status">
+          Vi har återställt det du påbörjade{' '}
+          {restoredAtFormat.format(restoredAt)}.{' '}
+          <button
+            type="button"
+            className={styles.linkButton}
+            onClick={discardDraft}
+          >
+            Töm formuläret »
+          </button>
+        </p>
+      )}
 
       <form
         className={styles.card}
@@ -375,6 +407,26 @@ const AssignmentForm = () => {
         </button>
       </form>
     </>
+  )
+}
+
+const subscribe = () => () => {}
+
+// Drafts are kept in localStorage so that a crashed or closed browser doesn't
+// lose a half-written assignment. The page is statically rendered, so the form
+// is first rendered empty and then remounted with the stored draft once
+// running in the browser.
+const AssignmentForm = () => {
+  const isBrowser = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  )
+
+  return isBrowser ? (
+    <Form key="browser" storedDraft={loadDraft()} persist />
+  ) : (
+    <Form key="server" storedDraft={null} persist={false} />
   )
 }
 
