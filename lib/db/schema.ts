@@ -67,3 +67,13 @@ export const assignmentComment = mysqlTable(
 
 export type Assignment = typeof assignment.$inferSelect
 export type AssignmentComment = typeof assignmentComment.$inferSelect
+
+// Added for the invite request bot. Message templates that Slack admins can
+// edit, keyed by name; see db/migrations.
+export const slackMessageTemplate = mysqlTable('slackMessageTemplate', {
+  name: varchar('name', { length: 64 }).primaryKey(),
+  body: text('body').notNull(),
+  updated: timestamp('updated').notNull(),
+  // Slack user id of the admin who last changed it.
+  updatedBy: varchar('updatedBy', { length: 255 }).notNull(),
+})

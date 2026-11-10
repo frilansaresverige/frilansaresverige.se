@@ -9,7 +9,7 @@ const eslintConfig = [
   ...next,
   ...nextTypeScript,
   {
-    files: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+    files: ['**/?(*.)+(spec|test).[jt]sx'],
     ...testingLibrary.configs['flat/react'],
   },
 ]

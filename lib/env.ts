@@ -65,3 +65,37 @@ export const slackEnv = lazy(() =>
     })
     .parse(process.env),
 )
+
+// The Slack app's endpoints (/api/slack/*) only need the signing secret, so
+// that their Request URLs can be verified before the bot is fully set up.
+export const isSlackAppConfigured = () => !!process.env.SLACK_SIGNING_SECRET
+
+// Verifies that requests to /api/slack/* come from Slack.
+export const slackSigningSecret = lazy(() =>
+  required.parse(process.env.SLACK_SIGNING_SECRET),
+)
+
+// Slack user ids who may edit the reply to invite requests without being
+// workspace admins or owners.
+export const templateEditors = () =>
+  (process.env.SLACK_TEMPLATE_EDITORS ?? '').split(/[\s,]+/).filter(Boolean)
+
+export const isInviteRequestBotConfigured = () =>
+  isSlackAppConfigured() && !!process.env.SLACK_INVITE_REQUEST_CHANNEL
+
+export const inviteRequestEnv = lazy(() =>
+  z
+    .object({
+      // The private channel Slackbot posts invite requests in; id or name.
+      SLACK_INVITE_REQUEST_CHANNEL: required.transform((value) =>
+        value.replace(/^#/, ''),
+      ),
+      // In dry-run mode the bot only describes, in the request's thread, what
+      // it would have sent. On until the parser is verified on real requests.
+      INVITE_REQUEST_DRY_RUN: z
+        .enum(['true', 'false'])
+        .default('true')
+        .transform((value) => value === 'true'),
+    })
+    .parse(process.env),
+)

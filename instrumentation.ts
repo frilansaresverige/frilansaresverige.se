@@ -12,9 +12,15 @@ export async function register() {
   }
 
   const { syncWithSlack } = await import('@/lib/slack')
+  const { isInviteRequestBotConfigured } = await import('@/lib/env')
 
   // Not awaited, so that a slow Slack doesn't delay the server.
   syncWithSlack().catch((error) => {
     console.error('Failed to sync assignments to Slack on startup:', error)
   })
+
+  if (isInviteRequestBotConfigured()) {
+    const { startInviteRequestSweep } = await import('@/lib/inviteRequests/bot')
+    startInviteRequestSweep()
+  }
 }

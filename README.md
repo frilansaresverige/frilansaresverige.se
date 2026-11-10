@@ -45,10 +45,55 @@ npm run prettier:write
 - Old links to uppdrag.frilansaresverige.se are permanently redirected by the
   Nginx reverse proxy on karmosin.
 
+## The invite request bot
+
+Members can invite people through Slack's own invite function, but new
+members are only accepted through the form at `/ansokan`. On the Free plan an
+app can't decline invite requests itself, so the bot does the next best thing
+(`lib/inviteRequests`):
+
+- When Slackbot posts an invite request in the invite request channel, the bot
+  sends the inviting member a direct message pointing them to the form, says
+  so in the request's thread and adds a :envelope_with_arrow: reaction. An
+  admin then only has to press Deny.
+- The reaction marks a request as handled. Every hour, and at startup, the bot
+  goes through the last 24 hours of the channel and handles any request
+  without it, in case an event never arrived.
+- Workspace admins edit the direct message from fribot's Home tab in Slack,
+  where only they see the button that opens the editing dialog. Others can
+  be given access with `SLACK_TEMPLATE_EDITORS`. The text is stored in the `slackMessageTemplate` table
+  (`db/migrations`); leaving it empty restores the default in
+  `lib/inviteRequests/template.ts`.
+- With `INVITE_REQUEST_DRY_RUN=true` (the default) the bot only writes in the
+  request's thread what it would have sent. Slack doesn't document the format
+  of invite requests, so keep it on until the bot has recognised real ones
+  correctly.
+
+### Slack app setup
+
+In the app's settings at https://api.slack.com/apps:
+
+1. **OAuth & Permissions:** add the bot scopes `groups:history`,
+   `reactions:write` and `im:write` (besides the existing ones),
+   then reinstall the app.
+2. **Event Subscriptions:** enable, set the request URL to
+   `https://www.frilansaresverige.se/api/slack/events` and subscribe to the
+   bot events `message.groups` and `app_home_opened`.
+3. **Interactivity & Shortcuts:** enable, with the request URL
+   `https://www.frilansaresverige.se/api/slack/interactions`.
+4. **App Home:** turn on the Home Tab.
+5. Invite the bot to the invite request channel, and put the app's signing
+   secret and the channel in `SLACK_SIGNING_SECRET` and
+   `SLACK_INVITE_REQUEST_CHANNEL`.
+
+The site has to be running with these settings (and the migration applied)
+before Slack will accept the request URLs, since it checks them.
+
 ## Database
 
-`lib/db/schema.ts` describes the existing tables for
-[Drizzle](https://orm.drizzle.team/); the application never alters them.
+`lib/db/schema.ts` describes the tables for
+[Drizzle](https://orm.drizzle.team/). The application never alters them;
+new tables are added with the SQL files in `db/migrations`, run by hand.
 Possible improvements, none of them required:
 
 - `assignmentComment.id` is computed as `COUNT(*) + 1` when inserting, so two

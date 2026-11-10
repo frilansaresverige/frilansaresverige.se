@@ -9,44 +9,8 @@ import {
   updateAssignment,
 } from '@/lib/assignments'
 import { siteUrl, slackEnv } from '@/lib/env'
+import { callSlack } from '@/lib/slackApi'
 import { fillTemplate, templates } from '@/lib/templates'
-
-interface SlackResponse {
-  ok: boolean
-  error?: string
-  [key: string]: unknown
-}
-
-const callSlack = async (
-  method: string,
-  params: Record<string, string | undefined>,
-  httpMethod: 'GET' | 'POST' = 'POST',
-): Promise<SlackResponse> => {
-  const body = new URLSearchParams(
-    Object.entries(params).filter(
-      (entry): entry is [string, string] => entry[1] !== undefined,
-    ),
-  )
-  const url = new URL(
-    `${slackEnv().SLACK_API_URL.replace(/\/+$/, '')}/${method}`,
-  )
-  if (httpMethod === 'GET') {
-    url.search = body.toString()
-  }
-
-  const response = await fetch(url, {
-    method: httpMethod,
-    headers: { Authorization: `Bearer ${slackEnv().SLACK_TOKEN}` },
-    body: httpMethod === 'POST' ? body : undefined,
-    signal: AbortSignal.timeout(10_000),
-  })
-
-  if (!response.ok) {
-    throw new Error(`Slack ${method} responded with HTTP ${response.status}`)
-  }
-
-  return (await response.json()) as SlackResponse
-}
 
 // Returns the message's ts, or null if posting failed.
 const postMessage = async (
