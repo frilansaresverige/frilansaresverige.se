@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Classic: a friendly robot head in the site's colours. -->
+  <rect width="512" height="512" fill="#4823dc"/>
+  <circle cx="470" cy="500" r="190" fill="#2601bb"/>
+  <circle cx="40" cy="520" r="120" fill="#2601bb"/>
+  <!-- antenna -->
+  <line x1="256" y1="132" x2="256" y2="88" stroke="#fffce3" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="256" cy="74" r="24" fill="#ff9c8e"/>
+  <!-- ears -->
+  <rect x="80" y="214" width="40" height="92" rx="18" fill="#ffcfc8"/>
+  <rect x="392" y="214" width="40" height="92" rx="18" fill="#ffcfc8"/>
+  <!-- head -->
+  <rect x="104" y="128" width="304" height="262" rx="76" fill="#fffce3"/>
+  <!-- eyes -->
+  <circle cx="198" cy="238" r="38" fill="#ff9c8e"/>
+  <circle cx="314" cy="238" r="38" fill="#ff9c8e"/>
+  <circle cx="186" cy="226" r="11" fill="#fffce3"/>
+  <circle cx="302" cy="226" r="11" fill="#fffce3"/>
+  <!-- smile -->
+  <path d="M206 318 Q256 352 306 318" fill="none" stroke="#4823dc" stroke-width="16" stroke-linecap="round"/>
+  <!-- shoulders -->
+  <path d="M150 512 V452 Q150 416 186 416 H326 Q362 416 362 452 V512 Z" fill="#fffce3"/>
+  <circle cx="256" cy="466" r="14" fill="#ff9c8e"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Speech bubble: a chatty robot, since fribot lives in Slack. -->
+  <rect width="512" height="512" fill="#ff9c8e"/>
+  <circle cx="500" cy="490" r="150" fill="#ffcfc8"/>
+  <!-- antenna -->
+  <line x1="256" y1="124" x2="256" y2="84" stroke="#4823dc" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="256" cy="70" r="22" fill="#fffce3" stroke="#4823dc" stroke-width="10"/>
+  <!-- bubble with tail -->
+  <path d="M150 380 L112 452 L236 392 Z" fill="#4823dc" stroke="#4823dc" stroke-width="12" stroke-linejoin="round"/>
+  <rect x="72" y="120" width="368" height="276" rx="96" fill="#4823dc"/>
+  <!-- screen eyes -->
+  <rect x="172" y="186" width="48" height="92" rx="24" fill="#fffce3"/>
+  <rect x="292" y="186" width="48" height="92" rx="24" fill="#fffce3"/>
+  <!-- smile -->
+  <path d="M206 322 Q256 354 306 322" fill="none" stroke="#fffce3" stroke-width="16" stroke-linecap="round"/>
+</svg>

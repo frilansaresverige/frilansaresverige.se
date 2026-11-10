@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Logo face: the logo mark (coral circle + cream quarter shape) as eyes. -->
+  <rect width="512" height="512" fill="#4823dc"/>
+  <circle cx="512" cy="0" r="170" fill="#2601bb"/>
+  <circle cx="0" cy="512" r="200" fill="#2601bb"/>
+  <!-- antenna -->
+  <line x1="256" y1="124" x2="256" y2="84" stroke="#fffce3" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="256" cy="70" r="22" fill="#ff9c8e"/>
+  <!-- head outline -->
+  <rect x="88" y="124" width="336" height="316" rx="88" fill="none" stroke="#fffce3" stroke-width="18"/>
+  <!-- eyes: the logo mark, scaled up -->
+  <circle cx="216" cy="250" r="76" fill="#ff9c8e"/>
+  <path d="M292 326 V250 A76 76 0 0 1 368 174 V326 Z" fill="#fffce3"/>
+  <!-- smile -->
+  <path d="M206 372 Q256 404 306 372" fill="none" stroke="#fffce3" stroke-width="18" stroke-linecap="round"/>
+</svg>
