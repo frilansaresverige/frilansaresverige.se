@@ -64,10 +64,11 @@ app can't decline invite requests itself, so the bot does the next best thing
   be given access with `SLACK_TEMPLATE_EDITORS`. The text is stored in the `slackMessageTemplate` table
   (`db/migrations`); leaving it empty restores the default in
   `lib/inviteRequests/template.ts`.
-- With `INVITE_REQUEST_DRY_RUN=true` (the default) the bot only writes in the
-  request's thread what it would have sent. Slack doesn't document the format
-  of invite requests, so keep it on until the bot has recognised real ones
-  correctly.
+- Slack doesn't document the format of invite requests; the parser in
+  `lib/inviteRequests/parse.ts` follows the real ones as of November 2026 and
+  ignores anything it doesn't recognise. With `INVITE_REQUEST_DRY_RUN=true`
+  (the default, for e.g. a new workspace) the bot only writes in the request's
+  thread what it would have sent. Production runs with it set to `false`.
 
 ### Slack app setup
 
