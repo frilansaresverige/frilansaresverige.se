@@ -1,44 +1,80 @@
 import { describe, expect, it } from 'vitest'
 
-import { hasReactionFrom, parseInviteRequest } from './parse'
+import {
+  hasReactionFrom,
+  hasReactionsFromOthers,
+  parseInviteRequest,
+  type SlackMessage,
+} from './parse'
 
-const request = {
+// Shaped like the requests Slackbot posts, with made-up ids and addresses.
+const buttons = {
+  id: 3,
+  callback_id: 'inviterequests_T0WORKSPACE',
+  actions: [
+    { name: 'approve', text: 'Send Invitation', type: 'button' },
+    { name: 'deny', text: 'Deny', type: 'button' },
+  ],
+}
+
+const request: SlackMessage = {
   type: 'message',
   user: 'USLACKBOT',
+  bot_id: 'B01',
   ts: '1800000000.000100',
-  text: '<@U012ABCDEF> har bett om att få bjuda in Anna@Example.com och <mailto:bo@example.se|bo@example.se>',
+  text: '<@U012ABCDEF> requested to invite one person to this workspace.',
+  attachments: [
+    { text: '*Email*: <mailto:Anna@Example.com|Anna@Example.com>' },
+    {
+      text: '*Reason for Request*:\nKollega, nås på bo@example.se eller via <@U0OTHER1>',
+    },
+    buttons,
+  ],
 }
 
 describe('parseInviteRequest', () => {
-  it('finds the inviter and the invitees', () => {
+  it('finds the inviter and the invited address', () => {
     expect(parseInviteRequest(request)).toEqual({
       ts: '1800000000.000100',
       inviterId: 'U012ABCDEF',
-      invitees: ['anna@example.com', 'bo@example.se'],
+      invitees: ['anna@example.com'],
     })
   })
 
-  it('looks in blocks and attachments too', () => {
+  it('handles requests for several people', () => {
     expect(
       parseInviteRequest({
         ...request,
-        text: 'Ny inbjudningsförfrågan',
-        blocks: [
+        text: '<@U012ABCDEF> requested to invite 2 people to this workspace.',
+        attachments: [
           {
-            type: 'section',
-            text: { type: 'mrkdwn', text: '<@W0ABCDEFG|anna> vill bjuda in' },
+            text: '*Emails*: <mailto:a@example.com|a@example.com>, <mailto:b@example.com|b@example.com>',
           },
+          buttons,
         ],
-        attachments: [{ fields: [{ value: 'cecilia@example.org' }] }],
-      }),
-    ).toMatchObject({
-      inviterId: 'W0ABCDEFG',
-      invitees: ['cecilia@example.org'],
-    })
+      })?.invitees,
+    ).toEqual(['a@example.com', 'b@example.com'])
   })
 
-  it('ignores messages from anyone but Slackbot', () => {
+  it('ignores requests an admin has already approved or denied', () => {
+    for (const outcome of [
+      ':white_check_mark: <@U0ADMIN> approved this request. Invitation sent.',
+      ':no_entry_sign: <@U0ADMIN> denied this request.',
+    ]) {
+      expect(
+        parseInviteRequest({
+          ...request,
+          attachments: [request.attachments![0]!, { text: outcome }],
+        }),
+      ).toBeNull()
+    }
+  })
+
+  it('ignores messages from anyone but Slackbot, and edits', () => {
     expect(parseInviteRequest({ ...request, user: 'U012ABCDEF' })).toBeNull()
+    expect(
+      parseInviteRequest({ ...request, subtype: 'message_changed' }),
+    ).toBeNull()
   })
 
   it('ignores replies in threads', () => {
@@ -47,24 +83,30 @@ describe('parseInviteRequest', () => {
     ).toBeNull()
   })
 
-  it('ignores Slackbot messages that are not invite requests', () => {
+  it('ignores other Slackbot messages and requests without an address', () => {
     expect(
-      parseInviteRequest({ ...request, text: 'Påminnelse: <@U012ABCDEF>' }),
+      parseInviteRequest({ ...request, text: 'Påminnelse till <@U012ABCDEF>' }),
     ).toBeNull()
     expect(
-      parseInviteRequest({ ...request, text: 'Skicka till anna@example.com' }),
+      parseInviteRequest({ ...request, attachments: [buttons] }),
     ).toBeNull()
   })
 })
 
-describe('hasReactionFrom', () => {
-  it('only counts the given user’s reaction', () => {
-    const message = {
-      ...request,
-      reactions: [{ name: 'envelope_with_arrow', users: ['UADMIN'] }],
-    }
+describe('reactions', () => {
+  const message = {
+    ...request,
+    reactions: [{ name: 'envelope_with_arrow', users: ['UBOT'] }],
+  }
 
-    expect(hasReactionFrom(message, 'envelope_with_arrow', 'UBOT')).toBe(false)
-    expect(hasReactionFrom(message, 'envelope_with_arrow', 'UADMIN')).toBe(true)
+  it('tells the bot’s own reaction apart from others’', () => {
+    expect(hasReactionFrom(message, 'envelope_with_arrow', 'UBOT')).toBe(true)
+    expect(hasReactionsFromOthers(message, 'UBOT')).toBe(false)
+
+    const watched = {
+      ...message,
+      reactions: [...message.reactions, { name: 'eyes', users: ['U0ADMIN'] }],
+    }
+    expect(hasReactionsFromOthers(watched, 'UBOT')).toBe(true)
   })
 })

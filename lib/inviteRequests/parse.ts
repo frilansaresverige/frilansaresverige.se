@@ -1,22 +1,33 @@
 // Recognises the message Slackbot posts in the invite request channel when a
-// member asks to invite someone.
+// member asks to invite someone. As observed in November 2026:
 //
-// The exact format isn't documented, so the parser is deliberately loose: a
-// message from Slackbot that mentions a member and contains at least one e-mail
-// address. It has to be checked against real requests before the bot is let
-// out of dry-run mode.
+//   text:        "<@U…> requested to invite one person to this workspace."
+//   attachments: "*Email*: <mailto:a@b.se|a@b.se>"
+//                "*Reason for Request*: …" (optional, free text)
+//                "*Channels:* …" (optional)
+//                Slack's own "Send Invitation" / "Deny" buttons, with a
+//                callback_id starting with "inviterequests"
+//
+// Once an admin has acted, Slack replaces the buttons with a line such as
+// ":no_entry_sign: <@U…> denied this request." So a request counts as open
+// only while its Deny button is there; anything unexpected is left alone.
+
+interface Attachment {
+  text?: string
+  callback_id?: string
+  actions?: { name?: string }[]
+}
 
 export interface SlackMessage {
   type?: string
   subtype?: string
   user?: string
   bot_id?: string
-  bot_profile?: { name?: string }
   text?: string
   ts: string
   thread_ts?: string
   blocks?: unknown[]
-  attachments?: unknown[]
+  attachments?: Attachment[]
   reactions?: { name: string; users?: string[] }[]
 }
 
@@ -27,31 +38,20 @@ export interface InviteRequest {
 }
 
 const SLACKBOT_USER_ID = 'USLACKBOT'
+const INVITER = /^<@([UW][A-Z0-9]+)(?:\|[^>]*)?> requested to invite\b/
+const MAILTO = /<mailto:([^|>]+)(?:\|[^>]*)?>/g
 
-const isFromSlackbot = (message: SlackMessage) =>
-  message.user === SLACKBOT_USER_ID ||
-  message.bot_profile?.name?.toLowerCase() === 'slackbot'
-
-// Gathers every string in the message, since Slack may put the interesting
-// parts in text, blocks or attachments.
-const collectText = (value: unknown, into: string[] = []) => {
-  if (typeof value === 'string') {
-    into.push(value)
-  } else if (Array.isArray(value)) {
-    value.forEach((item) => collectText(item, into))
-  } else if (value && typeof value === 'object') {
-    Object.values(value).forEach((item) => collectText(item, into))
-  }
-  return into
-}
-
-const MENTION = /<@([UW][A-Z0-9]+)(?:\|[^>]*)?>/
-const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g
+const isOpen = (attachments: Attachment[]) =>
+  attachments.some(
+    (attachment) =>
+      attachment.callback_id?.startsWith('inviterequests') &&
+      attachment.actions?.some((action) => action.name === 'deny'),
+  )
 
 export const parseInviteRequest = (
   message: SlackMessage,
 ): InviteRequest | null => {
-  if (!isFromSlackbot(message)) {
+  if (message.user !== SLACKBOT_USER_ID || message.subtype) {
     return null
   }
 
@@ -60,20 +60,27 @@ export const parseInviteRequest = (
     return null
   }
 
-  const text = collectText([
-    message.text,
-    message.blocks,
-    message.attachments,
-  ]).join('\n')
+  const attachments = message.attachments ?? []
+  const inviterId = message.text?.match(INVITER)?.[1]
 
-  const inviterId = text.match(MENTION)?.[1]
+  if (!inviterId || !isOpen(attachments)) {
+    return null
+  }
+
+  // Addresses only from the e-mail attachment, never from the free-text reason.
   const invitees = [
     ...new Set(
-      Array.from(text.matchAll(EMAIL), (match) => match[0].toLowerCase()),
+      attachments
+        .filter((attachment) => attachment.text?.startsWith('*Email'))
+        .flatMap((attachment) =>
+          Array.from(attachment.text!.matchAll(MAILTO), (match) =>
+            match[1]!.trim().toLowerCase(),
+          ),
+        ),
     ),
   ]
 
-  if (!inviterId || invitees.length === 0) {
+  if (invitees.length === 0) {
     return null
   }
 
@@ -87,4 +94,10 @@ export const hasReactionFrom = (
 ) =>
   message.reactions?.some(
     (r) => r.name === reaction && r.users?.includes(userId),
+  ) ?? false
+
+// An admin reacting (e.g. with :eyes:) means someone is already on it.
+export const hasReactionsFromOthers = (message: SlackMessage, userId: string) =>
+  message.reactions?.some((r) =>
+    r.users?.some((reactor) => reactor !== userId),
   ) ?? false

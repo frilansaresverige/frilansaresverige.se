@@ -10,6 +10,7 @@ import { callSlack, callSlackOrThrow } from '@/lib/slackApi'
 
 import {
   hasReactionFrom,
+  hasReactionsFromOthers,
   parseInviteRequest,
   type InviteRequest,
   type SlackMessage,
@@ -134,10 +135,15 @@ export const handleMessage = async (channel: string, message: SlackMessage) => {
 
   const request = parseInviteRequest(message)
 
+  if (request === null || inFlight.has(request.ts)) {
+    return false
+  }
+
+  // Handled already, or an admin is already on it.
+  const botUserId = await getBotUserId()
   if (
-    request === null ||
-    inFlight.has(request.ts) ||
-    hasReactionFrom(message, HANDLED_REACTION, await getBotUserId())
+    hasReactionFrom(message, HANDLED_REACTION, botUserId) ||
+    hasReactionsFromOthers(message, botUserId)
   ) {
     return false
   }
