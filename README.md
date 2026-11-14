@@ -115,9 +115,13 @@ Possible improvements, none of them required:
 
 ## Deployment
 
-`deploy.sh` builds the Docker image, copies it and `deploy/docker-compose.yml`
-to gredelin and restarts it with `docker compose`. Configuration is read from
-an `.env` file next to the compose file on the server (see `.env.example`).
+`deploy.sh` runs `deploy-app` from the automation repository (settings in
+`deploy.conf`): the tests, a build tagged with the commit, a vulnerability scan
+and the release on gredelin, which waits for the container's healthcheck and
+puts the previous release back if it fails (`./deploy.sh rollback | status`).
+The container's configuration is in the automation repository
+(`ansible/host_vars/gredelin/apps.yml`, `frilansaresverige`), and the variables
+from `.env.example` are its secrets, in the vault there.
 The Nginx on karmosin proxies www.frilansaresverige.se to it and must pass on
 the `Host` header, which server actions check against `Origin`.
 `GOOGLE_ANALYTICS_ID` is a build argument instead, as it ends up in the
