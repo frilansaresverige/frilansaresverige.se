@@ -16,7 +16,8 @@
   margin: 0 0 1em;
 }
 
-.wrapper a {
+/* Text links; the site's link-shaped buttons keep their own colours. */
+.wrapper a:not(:global(.primary-button)) {
   color: var(--coral);
 }
 
