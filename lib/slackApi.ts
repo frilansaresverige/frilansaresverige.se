@@ -8,6 +8,8 @@ export interface SlackResponse {
   [key: string]: unknown
 }
 
+const MAX_ATTEMPTS = 6
+
 // Parameters are form-encoded; structured ones (blocks, views) go in as JSON
 // strings, which every Web API method accepts.
 export const callSlack = async (
@@ -27,18 +29,28 @@ export const callSlack = async (
     url.search = body.toString()
   }
 
-  const response = await fetch(url, {
-    method: httpMethod,
-    headers: { Authorization: `Bearer ${slackEnv().SLACK_TOKEN}` },
-    body: httpMethod === 'POST' ? body : undefined,
-    signal: AbortSignal.timeout(10_000),
-  })
+  // Slack answers 429 with Retry-After when a method's rate limit is reached;
+  // waiting that long and trying again is what it asks for.
+  for (let attempt = 1; ; attempt++) {
+    const response = await fetch(url, {
+      method: httpMethod,
+      headers: { Authorization: `Bearer ${slackEnv().SLACK_TOKEN}` },
+      body: httpMethod === 'POST' ? body : undefined,
+      signal: AbortSignal.timeout(30_000),
+    })
 
-  if (!response.ok) {
-    throw new Error(`Slack ${method} responded with HTTP ${response.status}`)
+    if (response.status === 429 && attempt < MAX_ATTEMPTS) {
+      const seconds = Number(response.headers.get('retry-after')) || 30
+      await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
+      continue
+    }
+
+    if (!response.ok) {
+      throw new Error(`Slack ${method} responded with HTTP ${response.status}`)
+    }
+
+    return (await response.json()) as SlackResponse
   }
-
-  return (await response.json()) as SlackResponse
 }
 
 // Like callSlack, but throws unless Slack reports success.
@@ -55,3 +67,14 @@ export const callSlackOrThrow = async (
 
   return response
 }
+
+let botUserId: Promise<string> | null = null
+
+// The bot's own Slack user id, looked up once.
+export const getBotUserId = () =>
+  (botUserId ??= callSlackOrThrow('auth.test', {})
+    .then((response) => response.user_id as string)
+    .catch((error) => {
+      botUserId = null
+      throw error
+    }))

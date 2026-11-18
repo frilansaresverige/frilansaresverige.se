@@ -12,7 +12,8 @@ export async function register() {
   }
 
   const { syncWithSlack } = await import('@/lib/slack')
-  const { isInviteRequestBotConfigured } = await import('@/lib/env')
+  const { isInviteRequestBotConfigured, isSlackArchiveEnabled } =
+    await import('@/lib/env')
 
   // Not awaited, so that a slow Slack doesn't delay the server.
   syncWithSlack().catch((error) => {
@@ -22,5 +23,10 @@ export async function register() {
   if (isInviteRequestBotConfigured()) {
     const { startInviteRequestSweep } = await import('@/lib/inviteRequests/bot')
     startInviteRequestSweep()
+  }
+
+  if (isSlackArchiveEnabled()) {
+    const { startSlackArchive } = await import('@/lib/slackArchive/sync')
+    startSlackArchive()
   }
 }

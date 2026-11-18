@@ -70,16 +70,44 @@ app can't decline invite requests itself, so the bot does the next best thing
   (the default, for e.g. a new workspace) the bot only writes in the request's
   thread what it would have sent. Production runs with it set to `false`.
 
+## The Slack archive
+
+Slack's Free plan only shows the last 90 days and deletes messages after a
+year, so fribot keeps its own copy of the public channels it's in
+(`lib/slackArchive`), for a search on the website later. With
+`SLACK_ARCHIVE_ENABLED=true`:
+
+- Messages in those channels, thread replies included, arrive as events and
+  are stored in `slackMessage`. An edit replaces the text and keeps the old
+  version in `slackMessageRevision`; a deletion empties the message, marks it
+  deleted and keeps its last version there too. Reactions are left out.
+- Attachments are downloaded to `SLACK_ARCHIVE_FILES_DIR` (a Docker volume in
+  production) and listed in `slackFile`; failed downloads are retried every
+  ten minutes. Downloading needs the `files:read` scope.
+- Channels and user profiles go in `slackChannel` and `slackUser`.
+- fribot joins new public channels as they're created. Existing ones are
+  archived once it's been added to them (`/invite @fribot`), or all at once
+  with `SLACK_ARCHIVE_JOIN_ALL=true`. When it joins a channel, it fetches the
+  history Slack still has, threads included.
+- Every six hours, and at startup, it syncs channels and users and fetches the
+  last week's messages again, catching anything an event didn't bring.
+- Private channels and direct messages are never archived.
+
 ### Slack app setup
 
 In the app's settings at https://api.slack.com/apps:
 
 1. **OAuth & Permissions:** add the bot scopes `groups:history`,
-   `reactions:write` and `im:write` (besides the existing ones),
-   then reinstall the app.
+   `reactions:write` and `im:write` (besides the existing ones), and for the
+   archive `channels:history`, `channels:join` and `files:read`; then
+   reinstall the app.
 2. **Event Subscriptions:** enable, set the request URL to
    `https://www.frilansaresverige.se/api/slack/events` and subscribe to the
-   bot events `message.groups` and `app_home_opened`.
+   bot events `message.groups` and `app_home_opened`, and for the archive
+   `message.channels` and `channel_created`. Optionally also
+   `channel_rename`, `channel_archive`, `channel_unarchive`,
+   `channel_deleted`, `member_joined_channel`, `user_change` and `team_join`,
+   which keep channels and profiles current between the six-hourly syncs.
 3. **Interactivity & Shortcuts:** enable, with the request URL
    `https://www.frilansaresverige.se/api/slack/interactions`.
 4. **App Home:** turn on the Home Tab.
@@ -104,7 +132,7 @@ Possible improvements, none of them required:
   `TIMESTAMP` columns would be easier to read and query.
 - `clientHourlyRate` is a `varchar(20)` although only integers are stored;
   an `INT UNSIGNED` would allow sorting and filtering.
-- `slackChannel` stores a channel name (e.g. `#uppdrag`), which breaks if the
+- `assignment.slackChannel` stores a channel name (e.g. `#uppdrag`), which breaks if the
   channel is renamed before an assignment reaches Slack. Storing the channel
   id instead would also make `slackChannelId` unnecessary.
 - An index on `assignment.slackId` and on `(deleted, slackDeleted)` would keep
@@ -125,7 +153,8 @@ from `.env.example` are its secrets, in the vault there.
 The Nginx on karmosin proxies www.frilansaresverige.se to it and must pass on
 the `Host` header, which server actions check against `Origin`.
 `GOOGLE_ANALYTICS_ID` is a build argument instead, as it ends up in the
-statically rendered pages.
+statically rendered pages. The healthcheck uses `/readyz` (the database);
+`/livez` only answers.
 
 ## Contributions
 

@@ -1,9 +1,10 @@
 import { after } from 'next/server'
 
-import { isSlackAppConfigured } from '@/lib/env'
+import { isSlackAppConfigured, isSlackArchiveEnabled } from '@/lib/env'
 import { handleMessage, publishHome } from '@/lib/inviteRequests/bot'
 import type { SlackMessage } from '@/lib/inviteRequests/parse'
 import { readVerifiedBody } from '@/lib/inviteRequests/verifyRequest'
+import { handleArchiveEvent, type SlackEvent } from '@/lib/slackArchive/events'
 
 // Slack's Events API. Slack expects an answer within three seconds and retries
 // otherwise, so the work happens after responding.
@@ -21,7 +22,11 @@ export async function POST(request: Request) {
   const payload = JSON.parse(body) as {
     type: string
     challenge?: string
-    event?: SlackMessage & { channel?: string; tab?: string }
+    event?: SlackMessage & {
+      channel?: string
+      channel_type?: string
+      tab?: string
+    }
   }
 
   if (payload.type === 'url_verification') {
@@ -30,12 +35,24 @@ export async function POST(request: Request) {
 
   const event = payload.event
 
+  // Invite requests; handleMessage ignores other channels.
   if (payload.type === 'event_callback' && event?.type === 'message') {
     after(async () => {
       try {
         await handleMessage(event.channel ?? '', event)
       } catch (error) {
         console.error(`Failed to handle invite request ${event.ts}:`, error)
+      }
+    })
+  }
+
+  // Messages in public channels, and channel and user changes.
+  if (payload.type === 'event_callback' && event && isSlackArchiveEnabled()) {
+    after(async () => {
+      try {
+        await handleArchiveEvent(event as unknown as SlackEvent)
+      } catch (error) {
+        console.error(`Failed to archive a Slack ${event.type} event:`, error)
       }
     })
   }

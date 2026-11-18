@@ -28,6 +28,9 @@ ENV HOSTNAME=0.0.0.0
 # Alpine fixes published since the base image was built (such as zlib 1.4, November 2026).
 RUN apk upgrade --no-cache
 RUN addgroup -g 1001 -S nodejs && adduser -u 1001 -S nextjs -G nodejs
+# The Slack archive's attachments; a volume in production, which Docker
+# initialises with this directory's owner.
+RUN mkdir -p /app/data/slack-files && chown -R nextjs:nodejs /app/data
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -36,5 +39,5 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 EXPOSE 3000
 HEALTHCHECK --interval=1m --timeout=5s --start-period=20s \
-  CMD wget -q --spider http://127.0.0.1:3000/api/health || exit 1
+  CMD wget -q --spider http://127.0.0.1:3000/readyz || exit 1
 CMD ["node", "server.js"]

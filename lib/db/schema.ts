@@ -4,10 +4,14 @@ import {
   bigint,
   boolean,
   foreignKey,
+  index,
   int,
+  json,
+  mediumtext,
   mysqlEnum,
   mysqlTable,
   primaryKey,
+  serial,
   text,
   varchar,
 } from 'drizzle-orm/mysql-core'
@@ -77,3 +81,108 @@ export const slackMessageTemplate = mysqlTable('slackMessageTemplate', {
   // Slack user id of the admin who last changed it.
   updatedBy: varchar('updatedBy', { length: 255 }).notNull(),
 })
+
+// The archive of the public Slack channels; see
+// db/migrations/2026-11-18-slackArchive.sql for what each column holds.
+const slackId = (name: string) => varchar(name, { length: 32 })
+
+export const slackChannel = mysqlTable('slackChannel', {
+  id: slackId('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  topic: text('topic'),
+  purpose: text('purpose'),
+  created: timestamp('created').notNull(),
+  creatorId: slackId('creatorId'),
+  memberCount: int('memberCount'),
+  isArchived: boolean('isArchived').notNull().default(false),
+  isMember: boolean('isMember').notNull().default(false),
+  deleted: timestamp('deleted'),
+  backfilled: timestamp('backfilled'),
+  updated: timestamp('updated').notNull(),
+  raw: json('raw').notNull(),
+})
+
+export const slackUser = mysqlTable('slackUser', {
+  id: slackId('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  realName: varchar('realName', { length: 255 }),
+  displayName: varchar('displayName', { length: 255 }),
+  title: varchar('title', { length: 255 }),
+  avatarUrl: varchar('avatarUrl', { length: 1024 }),
+  timezone: varchar('timezone', { length: 64 }),
+  isBot: boolean('isBot').notNull().default(false),
+  isDeleted: boolean('isDeleted').notNull().default(false),
+  updated: timestamp('updated').notNull(),
+  raw: json('raw').notNull(),
+})
+
+export const slackMessage = mysqlTable(
+  'slackMessage',
+  {
+    channelId: slackId('channelId').notNull(),
+    ts: slackId('ts').notNull(),
+    threadTs: slackId('threadTs'),
+    userId: slackId('userId'),
+    botId: slackId('botId'),
+    username: varchar('username', { length: 255 }),
+    subtype: varchar('subtype', { length: 64 }),
+    text: mediumtext('text').notNull(),
+    posted: timestamp('posted').notNull(),
+    edited: slackId('edited'),
+    replyCount: int('replyCount').notNull().default(0),
+    deleted: timestamp('deleted'),
+    updated: timestamp('updated').notNull(),
+    raw: json('raw'),
+  },
+  (table) => [
+    primaryKey({ columns: [table.channelId, table.ts] }),
+    index('slackMessage_thread').on(table.channelId, table.threadTs),
+    index('slackMessage_user').on(table.userId),
+    index('slackMessage_posted').on(table.posted),
+  ],
+)
+
+export const slackMessageRevision = mysqlTable(
+  'slackMessageRevision',
+  {
+    id: serial('id').primaryKey(),
+    channelId: slackId('channelId').notNull(),
+    ts: slackId('ts').notNull(),
+    reason: mysqlEnum('reason', ['edited', 'deleted']).notNull(),
+    replaced: timestamp('replaced').notNull(),
+    text: mediumtext('text').notNull(),
+    edited: slackId('edited'),
+    raw: json('raw'),
+  },
+  (table) => [
+    index('slackMessageRevision_message').on(table.channelId, table.ts),
+  ],
+)
+
+export const slackFile = mysqlTable(
+  'slackFile',
+  {
+    id: slackId('id').primaryKey(),
+    channelId: slackId('channelId').notNull(),
+    messageTs: slackId('messageTs').notNull(),
+    userId: slackId('userId'),
+    name: varchar('name', { length: 1024 }),
+    title: varchar('title', { length: 1024 }),
+    mimetype: varchar('mimetype', { length: 255 }),
+    filetype: varchar('filetype', { length: 64 }),
+    size: bigint('size', { mode: 'number' }),
+    created: timestamp('created'),
+    path: varchar('path', { length: 1024 }),
+    downloaded: timestamp('downloaded'),
+    attempts: int('attempts').notNull().default(0),
+    lastError: varchar('lastError', { length: 1024 }),
+    updated: timestamp('updated').notNull(),
+    raw: json('raw').notNull(),
+  },
+  (table) => [
+    index('slackFile_message').on(table.channelId, table.messageTs),
+    index('slackFile_pending').on(table.downloaded, table.attempts),
+  ],
+)
+
+export type SlackMessageRow = typeof slackMessage.$inferSelect

@@ -6,7 +6,7 @@ import {
   siteUrl,
   templateEditors,
 } from '@/lib/env'
-import { callSlack, callSlackOrThrow } from '@/lib/slackApi'
+import { callSlack, callSlackOrThrow, getBotUserId } from '@/lib/slackApi'
 
 import {
   hasReactionFrom,
@@ -29,16 +29,6 @@ const SWEEP_INTERVAL_MS = 60 * 60 * 1000
 const SWEEP_WINDOW_SECONDS = 24 * 60 * 60
 
 export const applicationUrl = () => `${siteUrl()}/ansokan`
-
-let botUserId: Promise<string> | null = null
-
-const getBotUserId = () =>
-  (botUserId ??= callSlackOrThrow('auth.test', {})
-    .then((response) => response.user_id as string)
-    .catch((error) => {
-      botUserId = null
-      throw error
-    }))
 
 let channelId: Promise<string> | null = null
 

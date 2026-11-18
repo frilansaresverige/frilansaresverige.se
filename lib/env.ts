@@ -99,3 +99,29 @@ export const inviteRequestEnv = lazy(() =>
     })
     .parse(process.env),
 )
+
+// The archive of the public channels (lib/slackArchive). Off unless enabled,
+// so that a development server doesn't start fetching Slack's history.
+export const isSlackArchiveEnabled = () =>
+  process.env.SLACK_ARCHIVE_ENABLED === 'true'
+
+export const slackArchiveEnv = lazy(() =>
+  z
+    .object({
+      // Where attachments are downloaded to; a volume in production.
+      SLACK_ARCHIVE_FILES_DIR: required.default('/app/data/slack-files'),
+      // Larger attachments are recorded but not downloaded.
+      SLACK_ARCHIVE_MAX_FILE_BYTES: z.coerce
+        .number()
+        .int()
+        .positive()
+        .default(500 * 1024 * 1024),
+      // Join every existing public channel, not just new ones and those the
+      // bot has been added to.
+      SLACK_ARCHIVE_JOIN_ALL: z
+        .enum(['true', 'false'])
+        .default('false')
+        .transform((value) => value === 'true'),
+    })
+    .parse(process.env),
+)
