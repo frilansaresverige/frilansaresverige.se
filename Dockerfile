@@ -27,6 +27,12 @@ ENV HOSTNAME=0.0.0.0
 
 # Alpine fixes published since the base image was built (such as zlib 1.4, November 2026).
 RUN apk upgrade --no-cache
+# The server is `node server.js` and needs no package manager: npm, npx,
+# corepack and yarn come with the base image and are removed, with their own
+# dependencies, which would otherwise show up in the scan.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+      /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+      /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-*
 RUN addgroup -g 1001 -S nodejs && adduser -u 1001 -S nextjs -G nodejs
 # The Slack archive's attachments; a volume in production, which Docker
 # initialises with this directory's owner.
