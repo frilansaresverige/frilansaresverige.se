@@ -125,3 +125,17 @@ export const slackArchiveEnv = lazy(() =>
     })
     .parse(process.env),
 )
+
+// "Sign in with Slack" for the archive's search (/arkiv). From the Slack
+// app's Basic Information → App Credentials.
+export const isSlackLoginConfigured = () =>
+  !!process.env.SLACK_CLIENT_ID && !!process.env.SLACK_CLIENT_SECRET
+
+export const slackLoginEnv = lazy(() =>
+  z
+    .object({
+      SLACK_CLIENT_ID: required,
+      SLACK_CLIENT_SECRET: required,
+    })
+    .parse(process.env),
+)

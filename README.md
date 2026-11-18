@@ -93,6 +93,23 @@ year, so fribot keeps its own copy of the public channels it's in
   last week's messages again, catching anything an event didn't bring.
 - Private channels and direct messages are never archived.
 
+### Searching it
+
+Members search the archive at `/arkiv`, after signing in with Slack ("Sign in
+with Slack", Slack's OpenID Connect; `lib/auth`). There are no accounts: the
+site checks that the person belongs to our workspace and isn't a guest or
+deactivated, and keeps who they are in a signed cookie for the browser
+session (at most seven days). Someone deactivated in Slack loses access at
+once. The cookies are signed with keys derived from `SLACK_CLIENT_SECRET`.
+
+- Every word, or "phrase in quotes", must occur in a message, also inside
+  longer words (`bokför` finds `bokföring`). Deleted messages and join notices
+  aren't shown; earlier versions of edited messages are kept but not shown.
+- Each hit links to its whole thread (`/arkiv/<channel>/<ts>`), with its
+  attachments. Attachments are only served to signed-in members, and only
+  plain images are shown in the browser; everything else is downloaded.
+- fribot's Home tab links to the search.
+
 ### Slack app setup
 
 In the app's settings at https://api.slack.com/apps:
@@ -111,7 +128,12 @@ In the app's settings at https://api.slack.com/apps:
 3. **Interactivity & Shortcuts:** enable, with the request URL
    `https://www.frilansaresverige.se/api/slack/interactions`.
 4. **App Home:** turn on the Home Tab.
-5. Invite the bot to the invite request channel, and put the app's signing
+5. **For signing in to the archive:** under OAuth & Permissions, add the
+   redirect URL `https://www.frilansaresverige.se/api/auth/slack/callback`
+   and the user token scopes `openid` and `profile`. The client ID and secret
+   (Basic Information → App Credentials) go in `SLACK_CLIENT_ID` and
+   `SLACK_CLIENT_SECRET`.
+6. Invite the bot to the invite request channel, and put the app's signing
    secret and the channel in `SLACK_SIGNING_SECRET` and
    `SLACK_INVITE_REQUEST_CHANNEL`.
 

@@ -38,6 +38,19 @@ export const buildHomeView = ({
         text: 'Jag är Frilansare Sveriges robot. Jag publicerar konsultuppdragen som skickas in via <https://www.frilansaresverige.se/uppdrag|frilansaresverige.se/uppdrag>, och hänvisar den som vill bjuda in någon till communityt till <https://www.frilansaresverige.se/ansokan|ansökningsformuläret>.',
       },
     },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: 'Jag sparar också diskussionerna i de publika kanaler jag är med i, så att de finns kvar efter Slacks 90 dagar. Logga in med ditt Slack-konto för att söka i dem.',
+      },
+      accessory: {
+        type: 'button',
+        text: { type: 'plain_text', text: 'Sök i arkivet' },
+        url: 'https://www.frilansaresverige.se/arkiv',
+        action_id: 'open_archive',
+      },
+    },
     ...(isAdmin
       ? [
           { type: 'divider' },
